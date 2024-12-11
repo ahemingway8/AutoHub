@@ -24,9 +24,8 @@ def poll():
 
             for automobile in data["autos"]:
                 AutomobileVO.objects.update_or_create(
-                    import_href=automobile["href"],
+                    vin=automobile["vin"],
                     defaults = {
-                        "vin": automobile["vin"],
                         "sold": automobile["sold"],
                     }
                 )

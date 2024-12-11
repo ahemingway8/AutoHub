@@ -13,6 +13,9 @@ class AutomobileVO(models.Model):
     def get_api_url(self):
         return reverse("api_automobile", kwargs={"vin": self.vin})
 
+    class Meta:
+        db_table = 'service_rest_automobilevo'
+
 class Appointment(models.Model):
     date_time = models.DateTimeField
     reason = models.CharField(max_length=100)
