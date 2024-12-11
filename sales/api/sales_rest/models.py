@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.core.validators import RegexValidator
 # Create your models here.
 
 class AutomobileVO(models.Model):
@@ -10,13 +10,14 @@ class AutomobileVO(models.Model):
 class Salesperson(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
-    employee_id = models.PositiveIntegerField(unique=True)
+    employee_id = models.CharField(max_length=50, unique=True)
 
 
 class Customer(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     address = models.TextField()
+    phone_number = models.CharField(max_length=20)
 
 
 class Sale(models.Model):
@@ -35,4 +36,4 @@ class Sale(models.Model):
         related_name="sales",
         on_delete=models.CASCADE
     )
-    price = models.DecimalField(max_digits=10, decimal_places=2)
+    price = models.CharField(max_length=200)
