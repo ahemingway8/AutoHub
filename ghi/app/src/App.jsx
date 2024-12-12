@@ -6,6 +6,7 @@ import SalespeopleList from "./SalespeopleList";
 import SalespersonForm from "./SalespersonForm";
 import CustomersList from "./CustomersList";
 import CustomerForm from "./CustomerForm";
+import AutomobileForm from "./AutomobileForm";
 
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
 				<Routes>
 					<Route path="/" element={<MainPage />} />
 					<Route path="automobiles" element={<AutomobilesList />} />
+					<Route path="addAutomobile" element={<AutomobileForm/>}/>
 					<Route path="salespeople" element={<SalespeopleList/>}/>
 					<Route path="addSalesperson" element={<SalespersonForm/>}/>
 					<Route path="customers" element={<CustomersList/>}/>
