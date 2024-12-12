@@ -7,23 +7,31 @@ function AutomobilesList() {
     const fetchAutos = async () => {
         const url = 'http://localhost:8100/api/automobiles/';
 
-        const response = await fetch(url);
+        try {
+            const response = await fetch(url);
 
-        if (response.ok) {
-            const data = await response.json();
-            setAutos(data.automobiles);
+            if (response.ok) {
+                const data = await response.json();
+                setAutos(data.autos);
+            } else {
+                console.error('Error fetching data:', response.statusText);
+            }
+        } catch (error) {
+            console.error('fetch error', error);
         }
-    }
+    };
 
     useEffect(() => {
         fetchAutos();
     }, []);
 
     return (
-        <table className="table table-stribed">
+        <div>
+            <h1>Automobiles</h1>
+        <table className="table table-striped">
             <thead>
                 <tr>
-                    <th>Vin</th>
+                    <th>VIN</th>
                     <th>Color</th>
                     <th>Year</th>
                     <th>Model</th>
@@ -32,20 +40,20 @@ function AutomobilesList() {
                 </tr>
             </thead>
             <tbody>
-                {autos.map((auto) => {
-                    return (
-                        <tr key={ auto.vin }>
+                {autos.map(auto => (
+
+                        <tr key={ auto.color + auto.vin }>
                             <td>{ auto.vin }</td>
                             <td>{ auto.color }</td>
                             <td>{ auto.year }</td>
-                            <td>{ auto.model }</td>
-                            <td>{ auto.manufacturer }</td>
-                            <td>{ auto.sold }</td>
+                            <td>{ auto.model.name }</td>
+                            <td>{ auto.model.manufacturer.name }</td>
+                            <td>{ auto.sold ? 'Yes' : 'No' }</td>
                         </tr>
-                    );
-                })}
+                ))}
             </tbody>
         </table>
+        </div>
 
     );
 }
