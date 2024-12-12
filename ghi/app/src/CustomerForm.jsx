@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 
 
 const initialFormState = {
-    employee_id: '',
     first_name: '',
-    last_name: ''
+    last_name: '',
+    phone_number: '',
+    address: ''
 }
 
 
-function SalespersonForm() {
+function CustomerForm() {
     const [formState, setFormState] = useState(initialFormState);
     const navigate = useNavigate();
 
@@ -21,11 +22,9 @@ function SalespersonForm() {
         });
     };
 
-
-
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const url = 'http://localhost:8090/api/salespeople/'
+        const url = 'http://localhost:8090/api/customers/'
         const fetchConfig = {
             method: 'POST',
             body: JSON.stringify(formState),
@@ -37,31 +36,20 @@ function SalespersonForm() {
         try {
             const response = await fetch(url, fetchConfig);
             if (response.ok) {
-                navigate('/salespeople')
+                navigate('/customers')
             } else {
-                console.error('Failed to add salesperson');
+                console.error('Failed to add customer');
             }
         } catch (error) {
             console.error('Submission error:', error);
         }
     };
 
+
     return (
         <>
-
-            <h1 className="text-center" style={{ paddingTop: '20px', paddingBottom: '20px'}}>Add a Salesperson</h1>
-            <form onSubmit={handleSubmit} id="add-salesperson-form">
-                <div className="form-floating mb-3">
-                    <input
-                        onChange={handleInputChange}
-                        value={formState.employee_id}
-                        placeholder="Employee ID"
-                        required type="text"
-                        name="employee_id"
-                        className="form-control"
-                    />
-                    <label htmlFor="employee_id">Employee ID</label>
-                </div>
+            <h1 className="text-center" style={{ paddingTop: '20px', paddingBottom: '20px'}}>Add a Customer</h1>
+            <form onSubmit={handleSubmit} id="add-customer-form">
                 <div className="form-floating mb-3">
                     <input
                         onChange={handleInputChange}
@@ -84,10 +72,32 @@ function SalespersonForm() {
                     />
                     <label htmlFor="last_name">Last Name</label>
                 </div>
+                <div className="form-floating mb-3">
+                    <input
+                        onChange={handleInputChange}
+                        value={formState.phone_number}
+                        placeholder="Phone Number"
+                        required type="text"
+                        name="phone_number"
+                        className="form-control"
+                    />
+                    <label htmlFor="phone_number">Phone Number</label>
+                </div>
+                <div className="form-floating mb-3">
+                    <textarea
+                        onChange={handleInputChange}
+                        value={formState.address}
+                        placeholder="Address"
+                        required
+                        name="address"
+                        className="form-control"
+                    />
+                    <label htmlFor="address">Address</label>
+                </div>
                 <button className="btn btn-primary">Create</button>
             </form>
         </>
     );
 }
 
-export default SalespersonForm;
+export default CustomerForm

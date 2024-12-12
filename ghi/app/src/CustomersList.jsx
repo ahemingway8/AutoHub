@@ -27,7 +27,7 @@ function CustomersList() {
 
     return (
         <div>
-            <h1>Customers</h1>
+            <h1 style={{ paddingTop: '20px', paddingBottom: '20px'}}>Customers</h1>
             <table className="table table-striped">
                 <thead>
                     <tr>
