@@ -27,7 +27,7 @@ function AutomobilesList() {
 
     return (
         <div>
-            <h1>Automobiles</h1>
+            <h1 style={{ paddingTop: '20px', paddingBottom: '20px'}}>Automobiles</h1>
         <table className="table table-striped">
             <thead>
                 <tr>

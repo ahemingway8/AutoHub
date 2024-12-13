@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
 
-function SalespeopleList() {
-    const [salespeople, setSalespeople] = useState([]);
+function CustomersList() {
+    const [customers, setCustomers] = useState([]);
 
-    const fetchSalespeople = async () => {
-        const url = 'http://localhost:8090/api/salespeople/';
+    const fetchCustomers = async () => {
+        const url = 'http://localhost:8090/api/customers/';
 
         try {
             const response = await fetch(url);
 
             if (response.ok) {
                 const data = await response.json();
-                setSalespeople(data.salespeople);
+                setCustomers(data.customers);
             } else {
                 console.error('Error fetching data:', response.statusText);
             }
@@ -21,27 +21,29 @@ function SalespeopleList() {
     };
 
     useEffect(() => {
-        fetchSalespeople();
+        fetchCustomers();
     }, []);
 
 
     return (
         <div>
-            <h1 style={{ paddingTop: '20px', paddingBottom: '20px'}}>Salespeople</h1>
+            <h1 style={{ paddingTop: '20px', paddingBottom: '20px'}}>Customers</h1>
             <table className="table table-striped">
                 <thead>
                     <tr>
-                        <th>Employee ID</th>
                         <th>First Name</th>
                         <th>Last Name</th>
+                        <th>Phone Number</th>
+                        <th>Address</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {salespeople.map(salesperson => (
-                        <tr key={ salesperson.id }>
-                            <td>{ salesperson.employee_id }</td>
-                            <td>{ salesperson.first_name }</td>
-                            <td> {salesperson.last_name }</td>
+                    {customers.map(customer => (
+                        <tr key={ customer.id }>
+                            <td>{ customer.first_name }</td>
+                            <td>{ customer.last_name }</td>
+                            <td>{ customer.phone_number }</td>
+                            <td>{ customer.address }</td>
                         </tr>
                     ))}
                 </tbody>
@@ -50,4 +52,4 @@ function SalespeopleList() {
     );
 }
 
-export default SalespeopleList;
+export default CustomersList;
