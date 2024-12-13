@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'reacto-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const initialFormState = {
     name: ''
@@ -21,7 +21,7 @@ function ManufacturerForm() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const url = 'http://localhost:8100/api/manufacturer/'
+        const url = 'http://localhost:8100/api/manufacturers/'
         const fetchConfig = {
             method: 'POST',
             body: JSON.stringify(formState),
@@ -33,6 +33,7 @@ function ManufacturerForm() {
         try {
             const response = await fetch(url, fetchConfig);
             if (response.ok) {
+                setFormState(initialFormState);
                 navigate('/manufacturers')
             } else {
                 console.error('Failed to add manufacturer');
@@ -45,14 +46,13 @@ function ManufacturerForm() {
     return (
         <>
             <h1 className="text-center" style={{ paddingTop: '20px', paddingBottom: '20px'}}>Create a Manufacturer</h1>
-            <form onSubit={handleSubmit} id="create-manufacturer-form">
+            <form onSubmit={handleSubmit} id="create-manufacturer-form">
                 <div className="form-floating mb-3">
                     <input
                         onChange={handleInputChange}
                         value={formState.name}
                         placeholder="Manufacturer Name"
-                        required
-                        type="text"
+                        required type="text"
                         name="name"
                         className="form-control"
                     />
