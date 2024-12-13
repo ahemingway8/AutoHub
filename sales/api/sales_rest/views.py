@@ -153,14 +153,19 @@ def sales_list(request):
 
         try:
             automobile = AutomobileVO.objects.get(vin=content["automobile"])
+
+            if automobile.sold:
+                return JsonResponse({"message": "Automobile has already been sold"}, status=400)
+
             salesperson = Salesperson.objects.get(id=content["salesperson"])
             customer = Customer.objects.get(id=content["customer"])
+
         except AutomobileVO.DoesNotExist:
             return JsonResponse({"message": "Invalid vin"}, status=400)
         except Salesperson.DoesNotExist:
             return JsonResponse({"message": "Invalid salesperson id"}, status=400)
         except Customer.DoesNotExist:
-            return JsonResponse({"message": "Invalid customer id"})
+            return JsonResponse({"message": "Invalid customer id"}, status=400)
 
         sale = Sale.objects.create(
             automobile = automobile,
@@ -168,11 +173,17 @@ def sales_list(request):
             customer=customer,
             price=content["price"],
         )
+
+        automobile.sold = True
+        automobile.save()
+
+
         return JsonResponse(
             sale,
             encoder=SalesEncoder,
             safe=False,
         )
+
 
 @require_http_methods(["DELETE", "GET"])
 def sale_detail(request, pk):
