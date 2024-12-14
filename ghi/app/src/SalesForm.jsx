@@ -25,36 +25,93 @@ function SalesForm() {
     };
 
     useEffect(() => {
-        fetchUnsoldAutos();
-        fetchSalespeople();
-        fetchCustomers();
+        const fetchData = async () => {
+            try {
+                const autosResponse = await fetch('http://localhost:8100/api/automobiles/');
+                const autosData = await autosResponse.json();
+                setAutos(autosData.autos.filter(auto => !auto.sold));
+
+                const salesResponse = await fetch('http://localhost:8090/api/salespeople/');
+                const salesData = await salesResponse.json();
+                setSalespeople(salesData.salespeople);
+
+                const customersResponse = await fetch('http://localhost:8090/api/customers/');
+                const customersData = await customersResponse.json();
+                setCustomers(customersData.customers);
+            } catch (error) {
+                console.error('Error fetching data');
+            }
+        };
+        fetchData();
     }, []);
 
-    const fetchUnsoldAutos = async() => {
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        const url = 'http://localhost:8090/api/sales/'
+        const fetchConfig = {
+        method: 'POST',
+        body: JSON.stringify(formState),
+        headers: {
+            'Content-type': 'application/json',
+        },
+    };
+
+    try {
+        const response = await fetch(url, fetchConfig);
+        if (response.ok) {
+
+            setFormState(initialFormState);
+            navigate('/sales');
+        } else {
+        console.error('Failed to add sale')
+        }
+    } catch (error) {
+        console.error('Submission error:', error)
+    }
+
+    };
+
+    /*const fetchAutos = async() => {
+        const url = 'http://localhost:8100/api/automobiles/';
         try {
-            const response = await fetch('http://localhost:8100/api/automobiles/');
-            const data = await response.json();
-            setAutos(data);
+           const response = await fetch(url);
+           if (response.ok) {
+                const data = await response.json();
+                setAutos(data.autos);
+           } else {
+                console.error("Error fetching autos")
+           }
         } catch (error) {
             console.error('Error fetching automobiles:', error);
         }
     };
 
     const fetchSalespeople = async() => {
+        const url = 'http://localhost:8090/api/salespeople/';
         try {
-            const response = await fetch('http://localhost:8090/api/salespeople/');
+            const response = await fetch(url);
+            if (response.ok) {
             const data = await response.json();
             setSalespeople(data.salespeople);
+            } else {
+                console.error("Error fetching salespeople")
+            }
         } catch (error) {
             console.error('Error fetching autos:', error);
         }
     };
 
     const fetchCustomers = async() => {
+        const url = 'http://localhost:8090/api/customers/';
         try {
-            const response = await fetch('http://localhost:8090/api/customers/');
+            const response = await fetch(url);
+            if (response.ok) {
             const data = await response.json();
             setCustomers(data.customers);
+            } else {
+                console.error("Error fetching customers")
+            }
         } catch (error) {
             console.error('Error fetching autos:', error);
         }
@@ -62,25 +119,35 @@ function SalesForm() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        try {
-            const response = await fetch('http://localhost:8090/api/sales/', {
-                method: 'POST',
-                body: JSON.stringify(formState),
-                headers: {
-                    'Content-type': 'application/json',
-                },
-            });
-            if (response.ok) {
-                setFormState(initialFormState);
-                navigate('/sales');
-            } else {
-            console.error('Failed to add sale')
-            }
-        } catch (error) {
-        console.error('Submission error:', error)
-        }
+        const url = 'http://localhost:8090/api/sales/'
+        const fetchConfig = {
+        method: 'POST',
+        body: JSON.stringify(formState),
+        headers: {
+            'Content-type': 'application/json',
+        },
     };
 
+    try {
+        const response = await fetch(url, fetchConfig);
+        if (response.ok) {
+            setFormState(initialFormState);
+            fetchAutos();
+            navigate('/sales');
+        } else {
+        console.error('Failed to add sale')
+        }
+    } catch (error) {
+        console.error('Submission error:', error)
+    }
+
+    };
+
+    useEffect(() => {
+        fetchAutos();
+        fetchSalespeople();
+        fetchCustomers();
+    }, []); */
 
 
     return (
@@ -146,6 +213,7 @@ function SalesForm() {
                         required
                         type="number"
                         name="price"
+                        id="price"
                         className="form-control"
                     />
                     <label htmlFor="price">Price</label>
