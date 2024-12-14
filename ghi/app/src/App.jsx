@@ -15,6 +15,7 @@ import ManufacturerForm from "./ManufacturerForm";
 import TechnicianList from "./TechnicianList";
 import TechnicianForm from "./TechnicianForm";
 import AppointmentForm from "./AppointmentForm";
+import ManufacturerForm from "./ManufacturerForm";
 
 
 function App() {
