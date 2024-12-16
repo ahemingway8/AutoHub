@@ -62,8 +62,8 @@ There is an inventory of all the cars. We are polling information from the inven
 
 - POST: Create Manufacturer
     - URL: http://localhost:8100/api/manufacturers/
-    - name: Is a CharField and must be unique. Will send an error if it is the same as another manufacturer in the database.
     - JSON body:
+        - name: Is a CharField and must be unique. Will send an error if it is the same as another manufacturer in the database.
     ```
         {
             " name" : "Audi"
@@ -282,7 +282,7 @@ There is an inventory of all the cars. We are polling information from the inven
         },
         "sold": false
     }
-```
+    ```
 - GET: Get details of an automobile
     - Takes in the vin of an individual automobile and gets the       response data for it. The VIN is unique to each automobile and is the id for the vehicle.
     - URL: http://localhost:8100/api/automobiles/vin/
