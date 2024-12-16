@@ -330,14 +330,6 @@ There is an inventory of all the cars. We are polling information from the inven
 ###
 
 
-
-
-
-## Service microservice
-
-Explain your models and integration with the inventory
-microservice, here.
-
 ## Sales microservice
 
 The Sales microservice models are the salesperson model, customer model, sales model, and the automobileVO model. The automobileVO is needed to get the data of the automobiles through the sales poller. The sales poller is needed because the automobiles models is in the inventory microservice. This is important for being able to get data such as an automobile's vin and its sold status. This is then used to be able to identify an automobile by its vin and update the sold status of the automobile.
@@ -624,3 +616,106 @@ The Sales microservice models are the salesperson model, customer model, sales m
 	            "deleted": false
             }
         ```
+## Service microservice
+
+The Service microservice uses a technician model, and autombileVO model, and an appointment model. The Technician model contains the first_name, last_name, and employee_id. The Appointment model contains date_time, reason (reason for the appointment), status (if the appointment is created, finished, or cancelled), customer (customer's name), technician (key related to the technician model), and the vin. The AutomobileVO is needed to get data from the Inventory microservice's Automobile model. The vin is taken from the inventory to the autombileVO through the service poller.  The vin is then used to search for specific service appointments and knowledge on its current status.
+
+### Technicians
+- GET - List of technicians are currently in the system. Use the request type "GET" and the following Url to get the full list.
+    Url: "http://localhost:8080/api/technicians/"
+
+Input Data: None needed
+
+Response Data:
+{
+	"technicians": [
+		{
+			"first_name": "April",
+			"last_name": "Hemingway",
+			"employee_id": "ahemingway",
+			"id": 3
+		},...
+    ]
+}
+
+- POST - Create an individual new technician in the system. To create a technician, you would input values into First_name, last_name, and employee_id under a "POST" request. Each technician will be automatically assigned an "id". This value will pinpoint the exact technician by placing the "id" at the end of the endpoint. For example, http://localhost:8080/api/technicians/5". Once submitted, the new technician should appear on the list of technicians.
+    Url: "http://localhost:8080/api/technicians/<int:id>/"
+
+Input Data:
+{
+	"first_name": "Luciano" ,
+	"last_name": "Whitehurst",
+	"employee_id": "lwhitehurst"
+}
+
+Response Data:
+{
+	"first_name": "Luciano",
+	"last_name": "Whitehurst",
+	"employee_id": "lwhitehurst",
+	"id": 5
+}
+
+- DELETE - Delete a specific technician out of the system. Using the same id, change your request to "DELETE" and specify which technician you'd like to delete based on their "id". To confirm the deletion was complete, look in the list of technicians. If the name and/or id has disappeared, you've done it! You should recieve and message that also confirms the technician has been deleted.
+    Url: "http://localhost:8080/api/technicians/:id/"
+Input Data: None needed
+
+Response Data: "message": "Technician Deleted!"
+
+- GET - List of current active created appointments. Appointments are split into three categories: created, canceled, and finished. For a list of current created appointments, use the following link with a "GET" request.
+    Url: "http://localhost:8080/api/appointments/"
+Input Data: None needed
+
+Response Data:
+{
+	"appointments": [
+		{
+			""date_time":"2024-12-15T22:51:00.000Z",
+			"reason":"Oil Change",
+			"vin":"19XCV1A1KA87630",
+			"customer":"Jack Hill",
+            "technician":"4",
+		},...
+    ]
+}
+
+- POST - Create an individual appointment to send to the active list. In a POST request, assign data to the vin, customer (first and last name), date_time (specified format), reason (reason for appointment), status (new appointments will automatically be set to "created"), and technician_id. The outcome should have all the same fields plus the appointment.
+    Url: "http://localhost:8080/api/appointmnets/"
+Input Data:
+{
+	"vin": "1HGCM82633A123456",
+	"customer": "John Doe",
+	"date_time": "2024-12-15T21:10:00.000Z",
+	"reason": "Oil change",
+	"status": "created",
+	"technician_id": "5"
+}
+
+Response Data:
+{
+	"vin": "1HGCM82633A123456",
+	"customer": "John Doe",
+	"date_time": "2024-12-15T21:10:00.000Z",
+	"reason": "Oil change",
+	"status": "created",
+	"technician_id": "5"
+    "id": 1
+}
+
+- DELETE - Delete a specific appointment to send to the service history list. Using the id, change your request to "DELETE" and specify which appointment you'd like to delete based on their "id". To confirm the deletion was complete, look in the list of appointments. If the name and/or id has disappeared, you've done it!
+    Url: "http://localhost:8080/api/appointments/:id/"
+Input Data: None needed
+
+Response Data: "message": "Appointment Deleted!"
+
+- PUT - Set appointment status to "canceled" and sends to the service history list. If an appointment has been canceled, use the "id" of the specified appointment and place it within the following url. In a PUT request, this will change the status of the appointment to canceled and move the appointment from the list of appointments to the service history list. To verify, check the service history list.
+    Url: "http://localhost:8080/api/appointments/:id/cancel/"
+Input Data: None needed
+
+Response Data: None
+
+- PUT - Set appointment status to "finished" and sends to the service history list. If an appointment has been finished, use the "id" of the specified appointment and place it within the following url. In a PUT request, this will change the status of the appointment to finished and move the appointment from the list of appointments to the service history list. To verify, check the service history list.
+    Url: "http://localhost:8080/api/appointments/:id/finish/"
+Input Data: None needed
+
+Response Data: None
