@@ -31,9 +31,9 @@ function SalesForm() {
                 const autosData = await autosResponse.json();
                 setAutos(autosData.autos.filter(auto => !auto.sold));
 
-                const salesResponse = await fetch('http://localhost:8090/api/salespeople/');
-                const salesData = await salesResponse.json();
-                setSalespeople(salesData.salespeople);
+                const salespersonResponse = await fetch('http://localhost:8090/api/salespeople/');
+                const salespersonData = await salespersonResponse.json();
+                setSalespeople(salespersonData.salespeople);
 
                 const customersResponse = await fetch('http://localhost:8090/api/customers/');
                 const customersData = await customersResponse.json();
@@ -45,7 +45,55 @@ function SalesForm() {
         fetchData();
     }, []);
 
+    const handleSubmit = async (event) => {
+        event.preventDefault();
 
+        const saleUrl = 'http://localhost:8090/api/sales/';
+        const fetchConfig = {
+            method: 'POST',
+            body: JSON.stringify(formState),
+            headers: {
+                'Content-type': 'application/json',
+            },
+        };
+
+        try {
+            const saleResponse = await fetch(saleUrl, fetchConfig);
+            if (!saleResponse.ok) {
+                console.error('Failed to create sale');
+                return;
+            }
+
+            const saleData = await saleResponse.json();
+            console.log('Sale created:', saleData);
+
+            const automobileVin = formState.automobile;
+            const updateUrl = `http://localhost:8100/api/automobiles/${automobileVin}/`;
+            const updateConfig = {
+                method: 'PUT',
+                body: JSON.stringify({ sold: true }),
+                headers: {
+                    'Content-type': 'application/json',
+                },
+            };
+
+            const updateResponse = await fetch(updateUrl, updateConfig);
+            if (!updateResponse.ok) {
+                console.error('Failed to update automobile');
+                return;
+            }
+
+            const updateData = await updateResponse.json();
+            console.log('Automobile status updated:', updateData);
+
+            setFormState(initialFormState);
+            navigate('/sales');
+        } catch (error) {
+            console.error('Error in submission process:', error);
+        }
+    };
+
+/*
     const handleSubmit = async (event) => {
         event.preventDefault();
         const url = 'http://localhost:8090/api/sales/'
@@ -56,6 +104,7 @@ function SalesForm() {
             'Content-type': 'application/json',
         },
     };
+
 
     try {
         const response = await fetch(url, fetchConfig);
@@ -71,6 +120,7 @@ function SalesForm() {
     }
 
     };
+*/
 
     /*const fetchAutos = async() => {
         const url = 'http://localhost:8100/api/automobiles/';

@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import salespeople_list, salespeople_detail, customers_list, customers_detail, sales_list, sale_detail
+from .views import salespeople_list, salespeople_detail, customers_list, customers_detail, sales_list, sale_detail, salesperson_history
 
 urlpatterns = [
     path("salespeople/", salespeople_list, name="salespeople_list"),
@@ -14,4 +14,5 @@ urlpatterns = [
     path("sales/create", sales_list, name="sales_create"),
     path("sales/<int:pk>/", sale_detail, name="sale_delete"),
     path("sales/<int:pk>/", sale_detail, name="sale_detail"),
+    path("saleshistory/<int:pk>/", salesperson_history, name="salesperson_history"),
 ]
