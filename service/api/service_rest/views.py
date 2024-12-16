@@ -52,10 +52,8 @@ def appointments(request):
     elif request.method == "POST":
         try:
             content = json.loads(request.body)
-            print(content)
 
             technician_id = content.get('technician')
-            print(technician_id)
 
             if not technician_id:
                 return JsonResponse({"message": "Technician ID is required"}, status=400)
@@ -72,7 +70,6 @@ def appointments(request):
                 )
 
             vip_status(appointment)
-            print("status check")
 
             return JsonResponse(
                 {"appointment": appointment}, encoder=AppointmentEncoder,
