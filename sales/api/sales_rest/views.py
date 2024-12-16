@@ -71,7 +71,7 @@ def salespeople_list(request):
             )
         except:
             return JsonResponse(
-                {"message:" "Failed to create salesperson"},
+                {"message": "Failed to create salesperson"},
                 status=400
             )
 
@@ -116,7 +116,7 @@ def customers_list(request):
             )
         except:
             return JsonResponse(
-                {"message:" "Failed to create customer"},
+                {"message": "Failed to create customer"},
                 status=400
             )
 
@@ -139,40 +139,52 @@ def customers_detail(request,pk):
             return JsonResponse({"error": "Customer not found"}, status=404)
 
 
+
 @require_http_methods(["GET", "POST"])
 def sales_list(request):
 
     if request.method == "GET":
-        sales = Sale.objects.all()
-        return JsonResponse(
-            {"sales": sales},
-            encoder=SalesEncoder,
-        )
-    else:
-        content = json.loads(request.body)
+        try:
+
+            sales = Sale.objects.all()
+            return JsonResponse(
+                {"sales": sales},
+                encoder=SalesEncoder,
+            )
+        except Exception as e:
+            return JsonResponse(
+                {"message": f"Error fetching sales: {str(e)}"},
+                status=400,
+            )
+
+    elif request.method == "POST":
 
         try:
+            content = json.loads(request.body)
+
             automobile = AutomobileVO.objects.get(vin=content["automobile"])
             salesperson = Salesperson.objects.get(id=content["salesperson"])
             customer = Customer.objects.get(id=content["customer"])
-        except AutomobileVO.DoesNotExist:
-            return JsonResponse({"message": "Invalid vin"}, status=400)
-        except Salesperson.DoesNotExist:
-            return JsonResponse({"message": "Invalid salesperson id"}, status=400)
-        except Customer.DoesNotExist:
-            return JsonResponse({"message": "Invalid customer id"})
 
-        sale = Sale.objects.create(
-            automobile = automobile,
-            salesperson=salesperson,
-            customer=customer,
-            price=content["price"],
-        )
-        return JsonResponse(
-            sale,
-            encoder=SalesEncoder,
-            safe=False,
-        )
+            sale = Sale.objects.create(
+                automobile = automobile,
+                salesperson=salesperson,
+                customer=customer,
+                price=float(content["price"]),
+            )
+
+            return JsonResponse(
+                {"sale": sale},
+                encoder=SalesEncoder,
+                status=201
+            )
+        except Exception as e:
+            return JsonResponse(
+                {"message": f"Error creating sale: {str(e)}"},
+                status=500,
+            )
+
+
 
 @require_http_methods(["DELETE", "GET"])
 def sale_detail(request, pk):
@@ -184,10 +196,28 @@ def sale_detail(request, pk):
             encoder=SalesEncoder,
             safe=False,
         )
+
     else:
-        request.method == "DELETE"
+        if request.method == "DELETE":
+            try:
+                count, _ = Sale.objects.filter(id=pk).delete()
+                return JsonResponse({"deleted": count > 0})
+            except ObjectDoesNotExist:
+                return JsonResponse({"error": "Sale not found"}, status=404)
+
+
+@require_http_methods(["GET"])
+def salesperson_history(request, pk):
+    if request.method == "GET":
         try:
-            count, _ = Sale.objects.filter(id=pk).delete()
-            return JsonResponse({"deleted": count > 0})
-        except ObjectDoesNotExist:
-            return JsonResponse({"error": "Sale not found"}, status=404)
+            salesperson = Salesperson.objects.get(id=pk)
+            sales = Sale.objects.filter(salesperson=salesperson)
+
+            return JsonResponse(
+                {"sales": sales},
+                encoder=SalesEncoder,
+            )
+        except Salesperson.DoesNotExist:
+            return JsonResponse({"message": "Salesperson not found"}, status=404)
+        except Exception as e:
+            return JsonResponse({"message": str(e)}, status=500)

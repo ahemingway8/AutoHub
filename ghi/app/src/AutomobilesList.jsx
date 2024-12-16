@@ -25,6 +25,7 @@ function AutomobilesList() {
         fetchAutos();
     }, []);
 
+
     return (
         <div>
             <h1 style={{ paddingTop: '20px', paddingBottom: '20px'}}>Automobiles</h1>
