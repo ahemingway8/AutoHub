@@ -8,6 +8,8 @@ export default function AppointmentForm() {
     const [ customer, setCustomer ] = useState('');
     const [ technicians, setTechnicians ] = useState([]);
     const [ technician, setTechnician ] = useState('');
+    const [ dateInput, setDateInput ] = useState('');
+    const [ timeInput, setTimeInput ] = useState('');
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -48,13 +50,21 @@ export default function AppointmentForm() {
     async function handleFormSubmit(e) {
         e.preventDefault();
 
+        const date = new Date(dateInput);
+        const time = timeInput;
+
+        const [ hours, minutes ] = time.split(':');
+        date.setHours(hours);
+        date.setMinutes(minutes);
+
         const data = {
-            date_time,
+            date_time: date.toISOString(),
             reason,
             vin,
             customer,
             technician,
         };
+        console.log(JSON.stringify(data));
 
         const url = "http://localhost:8080/api/appointments/";
         const fetchOptions = {
@@ -64,9 +74,10 @@ export default function AppointmentForm() {
         };
 
         const res = await fetch(url, fetchOptions);
+
         if (res.ok) {
             resetFormState();
-            navigate('/serviceappointments');
+            navigate('/appointments');
         } else {
             console.error("Error creating appointment.");
         }
@@ -85,10 +96,10 @@ export default function AppointmentForm() {
                 <input type="text" className="form-control" id="customer" name="customer" onChange={handleCustomer} value={ customer } />
             </div>
             <div className="form-group">
-                <input className="form-control" type="date" value={date_time.split('T')[0] || ""} onChange={(e) => { const timePart = date_time.split('T')[1] || "00:00"; setDateTime(e.target.value + 'T' + timePart); }} required/>
+                <input className="form-control" type="date" value={dateInput} onChange={(e) => setDateInput(e.target.value)}/>
             </div>
             <div>
-                <input className="form-control" type="time" value={date_time.split('T')[1] || ""} onChange={(e) => { const datePart = date_time.split('T')[0] || "1970-01-01"; setDateTime(datePart + 'T' + e.target.value); }} required/>
+                <input className="form-control" type="time" value={timeInput} onChange={(e) => setTimeInput(e.target.value)}/>
             </div>
             <div>
                 <select className="form-select" id="technicians" name="technicians" value={ technician } aria-label="Default select example" onChange={handleTechnician}>
