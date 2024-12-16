@@ -9,13 +9,13 @@ function Nav() {
           <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-          <li className="nav-item">
+          <ul className="navbar-nav me-auto mb-2 mb-lg-0 d-flex flex-wrap">
+            <li className="nav-item">
               <NavLink className="nav-link" to="/manufacturers">Manufacturers</NavLink>
             </li>
-          <li className="nav-item">
-            <NavLink className="nav-link" to="/createmanufacturers">Create a Manufacturer</NavLink>
-          </li>
+            <li className="nav-item">
+              <NavLink className="nav-link" to="/createmanufacturers">Create a Manufacturer</NavLink>
+            </li>
             <li className="nav-item">
               <NavLink className="nav-link" to="/vehiclemodels">Models</NavLink>
             </li>
@@ -45,6 +45,9 @@ function Nav() {
             </li>
             <li className="nav-item">
               <NavLink className="nav-link" to="/addSale">Add a Sale</NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink className="nav-link" to="/saleshistory">Salesperson History</NavLink>
             </li>
             <li className="nav-item">
               <NavLink className="nav-link" to="/technicians">Technicians</NavLink>

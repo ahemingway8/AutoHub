@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from common.json import ModelEncoder
 import json
-import requests
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.core.exceptions import ObjectDoesNotExist
@@ -140,6 +139,7 @@ def customers_detail(request,pk):
             return JsonResponse({"error": "Customer not found"}, status=404)
 
 
+
 @require_http_methods(["GET", "POST"])
 def sales_list(request):
 
@@ -149,7 +149,7 @@ def sales_list(request):
             sales = Sale.objects.all()
             return JsonResponse(
                 {"sales": sales},
-            encoder=SalesEncoder,
+                encoder=SalesEncoder,
             )
         except Exception as e:
             return JsonResponse(
@@ -161,64 +161,28 @@ def sales_list(request):
 
         try:
             content = json.loads(request.body)
-            print("Request body content:", content)
-
 
             automobile = AutomobileVO.objects.get(vin=content["automobile"])
-            print(f"Found automobile with VIN: {automobile.vin}")
-
-            if automobile.sold:
-                print("Automobile has already been sold.")
-                url = f'https://localhost:8100/automobile/{automobile.vin}'
-                headers = {"Content-Type": "application/json"}
-                data = {"sold": True}
-
-                response = requests.put(url, json=data, headers=headers)
-
-                if response.status_code == 200:
-                    print("Item successfuly updated")
-                else:
-                    print(f"Error: {response.status_code}, {response.text}")
-                return JsonResponse({"message": "Automobile has already been sold"}, status=400)
-
-
-            automobile.sold = True
-            automobile.save()
-            print(f"Automobile {automobile.vin} marked as sold")
-
             salesperson = Salesperson.objects.get(id=content["salesperson"])
-            print(f"Salesperson found: {salesperson.first_name} {salesperson.last_name}")
-
             customer = Customer.objects.get(id=content["customer"])
-            print(f"Customer found: {customer.first_name} {customer.last_name}")
 
             sale = Sale.objects.create(
-            automobile = automobile,
-            salesperson=salesperson,
-            customer=customer,
-            price=content["price"],
+                automobile = automobile,
+                salesperson=salesperson,
+                customer=customer,
+                price=float(content["price"]),
             )
-            print(f"Sale created for automobile {automobile.vin} with price: {sale.price}")
 
             return JsonResponse(
-                {
-                    "sale": sale,
-                    "automobile": {
-                        "vin": automobile.vin,
-                        "sold": automobile.sold,
-                    }
-                },
+                {"sale": sale},
                 encoder=SalesEncoder,
-                safe=False,
+                status=201
             )
-
-        except AutomobileVO.DoesNotExist:
-            return JsonResponse({"message": "Invalid vin"}, status=400)
-        except Salesperson.DoesNotExist:
-            return JsonResponse({"message": "Invalid salesperson id"}, status=400)
-        except Customer.DoesNotExist:
-            return JsonResponse({"message": "Invalid customer id"}, status=400)
-
+        except Exception as e:
+            return JsonResponse(
+                {"message": f"Error creating sale: {str(e)}"},
+                status=500,
+            )
 
 
 
@@ -240,3 +204,20 @@ def sale_detail(request, pk):
                 return JsonResponse({"deleted": count > 0})
             except ObjectDoesNotExist:
                 return JsonResponse({"error": "Sale not found"}, status=404)
+
+
+@require_http_methods(["GET"])
+def salesperson_history(request, pk):
+    if request.method == "GET":
+        try:
+            salesperson = Salesperson.objects.get(id=pk)
+            sales = Sale.objects.filter(salesperson=salesperson)
+
+            return JsonResponse(
+                {"sales": sales},
+                encoder=SalesEncoder,
+            )
+        except Salesperson.DoesNotExist:
+            return JsonResponse({"message": "Salesperson not found"}, status=404)
+        except Exception as e:
+            return JsonResponse({"message": str(e)}, status=500)
