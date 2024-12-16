@@ -288,7 +288,7 @@ There is an inventory of all the cars. We are polling information from the inven
     - URL: http://localhost:8100/api/automobiles/vin/
     - Example URL: http://localhost:8100/api/automobiles/1C3CC5FB2AN120174/
 
-    - Response data (for an id of 1):
+    - Response data (for a vin of 1C3CC5FB2AN120174):
     ```
         {
             "href": "/api/automobiles/1C3CC5FB2AN120174/",
@@ -351,9 +351,9 @@ The Sales microservice models are the salesperson model, customer model, sales m
 ### Salespeople
 
 - POST: Create a salesperson
-    - The employee_id must be unique. If you try to create a salesperson with an employee_id that already exists, it will throw back an error.
     - URL: http://localhost:8090/api/salespeople/
     - JSON body:
+        - The employee_id must be unique. If you try to create a salesperson with an employee_id that already exists, it will throw back an error.
     ```
     	{
 			"first_name": "Jane",
@@ -421,9 +421,9 @@ The Sales microservice models are the salesperson model, customer model, sales m
 ### Customers
 
 - POST: Create a customer
-    - The phone_number field is a charfield, therefore, dashes are allowed.
     - URL: http://localhost:8090/api/customers/
     - JSON body:
+        - The phone_number field is a charfield, therefore, dashes are allowed.
     ```
         {
         "first_name": "Orange",
@@ -495,12 +495,12 @@ The Sales microservice models are the salesperson model, customer model, sales m
 ### Sales
 
 - POST: Create a sale
-    - automobile: A CharField that represents the VIN of the automobile. The VIN should be a max of 14 characters and must match an existing automobile in the database.
-    - salesperson: Represents the id number of a salesperson that must correspond to an existing Salesperson in the database.
-    - customer: Represents the id of a customer that must correspond to an existing Customer in the database.
-    - price: A float that represents the sale price of the automobile.
     - URL: http://localhost:8090/api/sales/
     - JSON body:
+        - automobile: A CharField that represents the VIN of the automobile. The VIN should be a max of 14 characters and must match an existing automobile in the database.
+        - salesperson: Represents the id number of a salesperson that must correspond to an existing Salesperson in the database.
+        - customer: Represents the id of a customer that must correspond to an existing Customer in the database.
+        - price: A float that represents the sale price of the automobile.
     ```
         {
         "automobile": "1J34LM5D93BVM2",
