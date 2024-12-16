@@ -83,6 +83,7 @@ function AutomobileForm() {
                         value={formState.color}
                         placeholder="Color"
                         required type="text"
+                        id="color"
                         name="color"
                         className='form-control'
                     />
@@ -94,6 +95,7 @@ function AutomobileForm() {
                         value={formState.year}
                         placeholder="Year"
                         required type="number"
+                        id="year"
                         name="year"
                         className='form-control'
                     />
@@ -105,6 +107,7 @@ function AutomobileForm() {
                         value={formState.vin}
                         placeholder="VIN"
                         required type="text"
+                        id="vin"
                         name="vin"
                         className='form-control'
                     />

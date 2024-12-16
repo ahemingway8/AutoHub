@@ -56,6 +56,7 @@ function CustomerForm() {
                         value={formState.first_name}
                         placeholder="First Name"
                         required type="text"
+                        id="first_name"
                         name="first_name"
                         className="form-control"
                     />
@@ -67,6 +68,7 @@ function CustomerForm() {
                         value={formState.last_name}
                         placeholder="Last Name"
                         required type="text"
+                        id="last_name"
                         name="last_name"
                         className="form-control"
                     />
@@ -78,6 +80,7 @@ function CustomerForm() {
                         value={formState.phone_number}
                         placeholder="Phone Number"
                         required type="text"
+                        id="phone_number"
                         name="phone_number"
                         className="form-control"
                     />
@@ -89,6 +92,7 @@ function CustomerForm() {
                         value={formState.address}
                         placeholder="Address"
                         required
+                        id="address"
                         name="address"
                         className="form-control"
                     />
