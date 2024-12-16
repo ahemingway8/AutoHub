@@ -662,6 +662,8 @@ Input Data: None needed
 
 Response Data: "message": "Technician Deleted!"
 
+### Appointments
+
 - GET - List of current active created appointments. Appointments are split into three categories: created, canceled, and finished. For a list of current created appointments, use the following link with a "GET" request.
     Url: "http://localhost:8080/api/appointments/"
 Input Data: None needed
