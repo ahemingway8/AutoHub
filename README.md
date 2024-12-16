@@ -33,8 +33,7 @@ There is an inventory of all the cars. We are polling information from the inven
 
 ## Design
 
-
-
+![img](./images/CarCar%20DDD%20Final.png)
 
 ## API Documentation
 
