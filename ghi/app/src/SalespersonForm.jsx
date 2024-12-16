@@ -56,7 +56,9 @@ function SalespersonForm() {
                         onChange={handleInputChange}
                         value={formState.employee_id}
                         placeholder="Employee ID"
-                        required type="text"
+                        required
+                        type="text"
+                        id="employee_id"
                         name="employee_id"
                         className="form-control"
                     />
@@ -68,6 +70,7 @@ function SalespersonForm() {
                         value={formState.first_name}
                         placeholder="First Name"
                         required type="text"
+                        id="first_name"
                         name="first_name"
                         className="form-control"
                     />
@@ -79,6 +82,7 @@ function SalespersonForm() {
                         value={formState.last_name}
                         placeholder="Last Name"
                         required type="text"
+                        id="last_name"
                         name="last_name"
                         className="form-control"
                     />

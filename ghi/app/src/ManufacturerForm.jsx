@@ -53,6 +53,7 @@ function ManufacturerForm() {
                         value={formState.name}
                         placeholder="Manufacturer Name"
                         required type="text"
+                        id="name"
                         name="name"
                         className="form-control"
                     />
