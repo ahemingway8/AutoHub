@@ -64,9 +64,6 @@ function SalesForm() {
                 return;
             }
 
-            const saleData = await saleResponse.json();
-            console.log('Sale created:', saleData);
-
             const automobileVin = formState.automobile;
             const updateUrl = `http://localhost:8100/api/automobiles/${automobileVin}/`;
             const updateConfig = {
@@ -77,127 +74,23 @@ function SalesForm() {
                 },
             };
 
-            const updateResponse = await fetch(updateUrl, updateConfig);
-            if (!updateResponse.ok) {
-                console.error('Failed to update automobile');
-                return;
+            try {
+                const updateResponse = await fetch(updateUrl, updateConfig);
+                if (updateResponse.ok) {
+                    setFormState(initialFormState);
+                    navigate('/sales');
+                } else {
+                    console.error('Failed to update automobile');
+
+                }
+            } catch (error) {
+                console.error('Error making PUT request:', error);
             }
 
-            const updateData = await updateResponse.json();
-            console.log('Automobile status updated:', updateData);
-
-            setFormState(initialFormState);
-            navigate('/sales');
         } catch (error) {
             console.error('Error in submission process:', error);
         }
     };
-
-/*
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        const url = 'http://localhost:8090/api/sales/'
-        const fetchConfig = {
-        method: 'POST',
-        body: JSON.stringify(formState),
-        headers: {
-            'Content-type': 'application/json',
-        },
-    };
-
-
-    try {
-        const response = await fetch(url, fetchConfig);
-        if (response.ok) {
-
-            setFormState(initialFormState);
-            navigate('/sales');
-        } else {
-        console.error('Failed to add sale')
-        }
-    } catch (error) {
-        console.error('Submission error:', error)
-    }
-
-    };
-*/
-
-    /*const fetchAutos = async() => {
-        const url = 'http://localhost:8100/api/automobiles/';
-        try {
-           const response = await fetch(url);
-           if (response.ok) {
-                const data = await response.json();
-                setAutos(data.autos);
-           } else {
-                console.error("Error fetching autos")
-           }
-        } catch (error) {
-            console.error('Error fetching automobiles:', error);
-        }
-    };
-
-    const fetchSalespeople = async() => {
-        const url = 'http://localhost:8090/api/salespeople/';
-        try {
-            const response = await fetch(url);
-            if (response.ok) {
-            const data = await response.json();
-            setSalespeople(data.salespeople);
-            } else {
-                console.error("Error fetching salespeople")
-            }
-        } catch (error) {
-            console.error('Error fetching autos:', error);
-        }
-    };
-
-    const fetchCustomers = async() => {
-        const url = 'http://localhost:8090/api/customers/';
-        try {
-            const response = await fetch(url);
-            if (response.ok) {
-            const data = await response.json();
-            setCustomers(data.customers);
-            } else {
-                console.error("Error fetching customers")
-            }
-        } catch (error) {
-            console.error('Error fetching autos:', error);
-        }
-    };
-
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        const url = 'http://localhost:8090/api/sales/'
-        const fetchConfig = {
-        method: 'POST',
-        body: JSON.stringify(formState),
-        headers: {
-            'Content-type': 'application/json',
-        },
-    };
-
-    try {
-        const response = await fetch(url, fetchConfig);
-        if (response.ok) {
-            setFormState(initialFormState);
-            fetchAutos();
-            navigate('/sales');
-        } else {
-        console.error('Failed to add sale')
-        }
-    } catch (error) {
-        console.error('Submission error:', error)
-    }
-
-    };
-
-    useEffect(() => {
-        fetchAutos();
-        fetchSalespeople();
-        fetchCustomers();
-    }, []); */
 
 
     return (

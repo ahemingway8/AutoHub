@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from common.json import ModelEncoder
 import json
-import requests
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.core.exceptions import ObjectDoesNotExist
@@ -162,28 +161,10 @@ def sales_list(request):
 
         try:
             content = json.loads(request.body)
-            print("Request body content:", content)
-
 
             automobile = AutomobileVO.objects.get(vin=content["automobile"])
-
-            print(f"Found automobile with VIN: {automobile.vin}")
-
-
-            #if automobile.sold:
-                 #return JsonResponse(
-                    #{"message": "This automobile has already been sold"},
-                    #status=400,
-                #)
-
-
-
             salesperson = Salesperson.objects.get(id=content["salesperson"])
-            print(f"Salesperson found: {salesperson.first_name} {salesperson.last_name}")
-
             customer = Customer.objects.get(id=content["customer"])
-            print(f"Customer found: {customer.first_name} {customer.last_name}")
-
 
             sale = Sale.objects.create(
                 automobile = automobile,
@@ -191,8 +172,6 @@ def sales_list(request):
                 customer=customer,
                 price=float(content["price"]),
             )
-            print(f"Sale created for automobile {automobile.vin} with price: {sale.price}")
-
 
             return JsonResponse(
                 {"sale": sale},
@@ -204,47 +183,6 @@ def sales_list(request):
                 {"message": f"Error creating sale: {str(e)}"},
                 status=500,
             )
-
-""""
-            automobile_update_url = f"http://inventory-api:8000/api/automobiles/{vin}/"
-
-            try:
-                response = requests.put(
-                    automobile_update_url,
-                    json={"sold": True},
-                    headers={"Content-Type": "application/json"}
-                )
-                print(f"PUT request to {automobile_update_url}, Response Status: {response.status_code}, Response Body: {response.text}")
-
-                if response.status_code !=200:
-                    print(f"Error updating automobile: {response.status_code}, Resposne Text: {response.text}")
-                    return JsonResponse(
-                        {"message": f"Error updating automobile status: {response.text}"},
-                        status=500,
-                    )
-            except requests.exceptions.RequestException as e:
-                print(f"Error in request: {e}")
-                return JsonResponse({"message": "Error updating automobnile status"}, status=500)
-
-            return JsonResponse(
-                {"sale": sale},
-                encoder=SalesEncoder,
-                status=201
-            )
-
-
-        except AutomobileVO.DoesNotExist:
-            return JsonResponse({"message": "Invalid vin"}, status=400)
-        except Salesperson.DoesNotExist:
-            return JsonResponse({"message": "Invalid salesperson id"}, status=400)
-        except Customer.DoesNotExist:
-            return JsonResponse({"message": "Invalid customer id"}, status=400)
-        except Exception as e:
-            return JsonResponse(
-                {"message": f"Error creating sale: {str(e)}"},
-                status=500,
-            )
-"""
 
 
 
