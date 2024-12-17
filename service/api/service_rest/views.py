@@ -1,4 +1,3 @@
-from django.shortcuts import render
 import json
 from django.views.decorators.http import require_http_methods
 from django.http import JsonResponse
@@ -58,7 +57,7 @@ def appointments(request):
             if not technician_id:
                 return JsonResponse({"message": "Technician ID is required"}, status=400)
 
-            technician = Technician.objects.get(id=content['technician'])
+            technician = Technician.objects.get(id=content['technician_id'])
 
             appointment = Appointment.objects.create(
                 vin=content['vin'],
@@ -80,6 +79,13 @@ def appointments(request):
             return JsonResponse({"message": "Technician Does Not Exist"}, status=404)
         except Exception as e:
             return JsonResponse({"message": str(e)}, status=400)
+    else:
+        return JsonResponse({"message": "Invalid request method"}, status=400)
+
+def vip_status(appointment):
+    if AutomobileVO.objects.filter(vin=appointment.vin).exists():
+        appointment.vip = True
+        appointment.save()
 
 @require_http_methods(["DELETE"])
 def appointment(request, id):
@@ -92,10 +98,6 @@ def appointment(request, id):
         except Appointment.DoesNotExist:
             return JsonResponse({"MESSAGE": "Appointment Does Not Exist"}, status=404)
 
-def vip_status(appointment):
-    if AutomobileVO.objects.filter(vin=appointment.vin).exists():
-        appointment.vip = True
-        appointment.save()
 
 def update_finish(request):
     if request.method == "PUT":

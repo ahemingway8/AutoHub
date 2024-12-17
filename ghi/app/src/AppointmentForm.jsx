@@ -44,21 +44,14 @@ export default function AppointmentForm() {
         setReason('')
         setVin('')
         setCustomer('')
-        setTechnicians('')
+        setTechnicians([])
     }
 
     async function handleFormSubmit(e) {
         e.preventDefault();
 
-        const date = new Date(dateInput);
-        const time = timeInput;
-
-        const [ hours, minutes ] = time.split(':');
-        date.setHours(hours);
-        date.setMinutes(minutes);
-
         const data = {
-            date_time: date.toISOString(),
+            date_time,
             reason,
             vin,
             customer,

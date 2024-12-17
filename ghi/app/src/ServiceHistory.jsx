@@ -57,7 +57,7 @@ export default function ServiceHistory() {
                     {appointments.map(appointment => {
                         const date = new Date(appointment.date_time);
                         const formattedDate = date.toLocaleDateString();
-                        const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit'});
+                        const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit'});
 
                         return (
                         <tr key={ appointment.id }>
