@@ -17,9 +17,9 @@ class AutomobileVO(models.Model):
         db_table = 'service_rest_automobilevo'
 
 class Appointment(models.Model):
-    date_time = models.DateTimeField
+    date_time = models.DateTimeField()
     reason = models.CharField(max_length=100)
-    status = models.CharField(max_length=50)
+    status = models.CharField(max_length=50, default="created")
     vin = models.CharField(max_length=50)
     customer = models.CharField(max_length=50)
     vip = models.BooleanField(default=False)

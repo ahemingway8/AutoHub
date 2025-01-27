@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function AppointmentForm() {
-    const [ date_time, setDateTime ] = useState('');
+    const [ dateTime, setDateTime ] = useState('');
     const [ reason, setReason ] = useState('');
     const [ vin, setVin ] = useState('');
     const [ customer, setCustomer ] = useState('');
@@ -47,17 +47,21 @@ export default function AppointmentForm() {
         setTechnicians([])
     }
 
-    async function handleFormSubmit(e) {
+    const handleFormSubmit = async (e) => {
         e.preventDefault();
 
+        const dateTime = new Date(`${dateInput}T${timeInput}`).toISOString();
+
         const data = {
-            date_time,
+            date_time: dateTime,
             reason,
             vin,
             customer,
-            technician,
+            technician_id: technician,
+            status: 'created'
         };
-        console.log(JSON.stringify(data));
+
+        console.log('Sending data:', data);
 
         const url = "http://localhost:8080/api/appointments/";
         const fetchOptions = {
@@ -66,13 +70,18 @@ export default function AppointmentForm() {
             body: JSON.stringify(data),
         };
 
-        const res = await fetch(url, fetchOptions);
+        try {
+            const res = await fetch(url, fetchOptions);
+            const responseData = await res.json();
 
-        if (res.ok) {
-            resetFormState();
-            navigate('/appointments');
-        } else {
-            console.error("Error creating appointment.");
+            if (res.ok) {
+                resetFormState();
+                navigate('/appointments');
+            } else {
+                console.error("Error creating appointment.", responseData.message);
+            }
+        } catch (error) {
+            console.error(error);
         }
     }
     return (

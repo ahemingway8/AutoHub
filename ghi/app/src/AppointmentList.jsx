@@ -16,12 +16,12 @@ export default function AppointmentList() {
     async function appointmentCancel(id) {
         const url = `http://localhost:8080/api/appointments/${id}/cancel/`;
         const fetchOptions = {
-            method: "POST",
+            method: "PUT",
             headers: {'Content-Type': "application/json"},
         };
         const res = await fetch(url, fetchOptions);
         if (res.ok) {
-            setAppointments(appointments.filter(appointment => appointment.id !== id));
+            getAppointments();
         } else {
             console.error("Error canceling appointment.");
         }
@@ -30,12 +30,12 @@ export default function AppointmentList() {
     async function appointmentFinish(id) {
         const url = `http://localhost:8080/api/appointments/${id}/finish/`;
         const fetchOptions = {
-            method: "POST",
+            method: "PUT",
             headers: {'Content-Type': "application/json"},
         };
         const res = await fetch(url, fetchOptions);
         if (res.ok) {
-            setAppointments(appointments.filter(appointment => appointment.id !== id));
+            getAppointments();
         } else {
             console.error("Could not process finish.");
         }
