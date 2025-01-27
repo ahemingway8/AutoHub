@@ -15,7 +15,7 @@ export default function TechnicianList() {
     return (
         <>
         <div>
-        <h1>Technicians</h1>
+        <h1 style={{paddingTop: '60px', paddingBottom: '20px'}}>Technicians</h1>
         <table className="table table-striped table-hover">
             <thead>
                 <tr>

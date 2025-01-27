@@ -45,7 +45,7 @@ function ManufacturerForm() {
 
     return (
         <>
-            <h1 className="text-center" style={{ paddingTop: '20px', paddingBottom: '20px'}}>Create a Manufacturer</h1>
+            <h1 className="text-center" style={{ paddingTop: '60px', paddingBottom: '20px'}}>Create a Manufacturer</h1>
             <form onSubmit={handleSubmit} id="create-manufacturer-form">
                 <div className="form-floating mb-3">
                     <input

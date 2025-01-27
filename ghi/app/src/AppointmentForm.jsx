@@ -77,7 +77,7 @@ export default function AppointmentForm() {
     }
     return (
         <>
-        <div className="shadow mt-4 p-4">
+        <div className="shadow mt-4 p-4" style={{paddingTop: '60px', paddingBottom: '20px'}}>
             <h1 className="text">Create a service appointment</h1>
             <form onSubmit={handleFormSubmit}>
             <div className="form-group">

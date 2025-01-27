@@ -15,7 +15,7 @@ export default function ManufacturerList() {
     return (
         <>
         <div>
-        <h1>Manufacturers</h1>
+        <h1 style={{paddingTop: '60px', paddingBottom: '20px'}}>Manufacturers</h1>
         <table className="table table-striped table-hover">
             <thead>
                 <tr>

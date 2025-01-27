@@ -50,7 +50,7 @@ export default function TechnicianForm() {
     return (
         <>
         <div className="shadow mt-4 p-4">
-            <h1 className="text-center">Add a Technician</h1>
+            <h1 className="text-center" style={{paddingTop: '60px', paddingBottom: '20px'}}>Add a Technician</h1>
             <form onSubmit={handleFormSubmit}>
             <div className="form-group">
                     <input className="form-control" placeholder="First name..." type="text" id="first_name" name="first_name" value={ first_name } onChange={handleFirstName} />

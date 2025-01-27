@@ -95,7 +95,7 @@ function SalesForm() {
 
     return (
         <>
-            <h1 className="text-center" style={{ paddingTop: '20px', paddingBottom: '20px'}}>Record a New Sale</h1>
+            <h1 className="text-center" style={{ paddingTop: '60px', paddingBottom: '20px'}}>Record a New Sale</h1>
             <form onSubmit={handleSubmit} id="add-sale-form">
                 <div className="mb-3">
                     <select

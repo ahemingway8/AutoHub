@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 function SalesList() {
     const [sales, setSales] = useState([]);
 
-    
+
     const fetchSales = async () => {
         const url = 'http://localhost:8090/api/sales/';
 
@@ -28,7 +28,7 @@ function SalesList() {
 
     return (
         <div>
-            <h1 style={{ paddingTop: '20px', paddingBottom: '20px'}}>Sales</h1>
+            <h1 style={{ paddingTop: '60px', paddingBottom: '20px'}}>Sales</h1>
             <table className="table table-striped">
                 <thead>
                     <tr>

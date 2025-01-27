@@ -1,10 +1,22 @@
+:root {
+    --bs-body-bg: #EDE8F5;
+    --bs-primary-color: #3D52A0;
+    --bs-secondary-color: #7091E6;
+    --bs-tertiary-color: #8697C4;
+    --bs-highlight-color: #A7B9D8;
+}
+
+
+
 body {
 	margin: 0;
+	padding: 0;
 	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
 		"Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
 		"Helvetica Neue", sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+	background-color: #ADBBDA;
 }
 
 code {
@@ -14,4 +26,17 @@ code {
 
 div {
 	padding-top: 20px;
+}
+
+.navbar-custom {
+	background-color: #A8D0E6;
+}
+
+.h1-custom {
+	color:#3D52A0;
+}
+
+.navbar {
+	padding-top: 0;
+	margin-top: 0;
 }

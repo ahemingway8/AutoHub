@@ -49,7 +49,7 @@ function SalespersonForm() {
     return (
         <>
 
-            <h1 className="text-center" style={{ paddingTop: '20px', paddingBottom: '20px'}}>Add a Salesperson</h1>
+            <h1 className="text-center" style={{ paddingTop: '60px', paddingBottom: '20px'}}>Add a Salesperson</h1>
             <form onSubmit={handleSubmit} id="add-salesperson-form">
                 <div className="form-floating mb-3">
                     <input

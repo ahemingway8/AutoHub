@@ -42,7 +42,7 @@ function SalespersonHistory() {
 
     return (
         <div>
-            <h1 style={{ paddingTop: '20px', paddingBottom: '20px'}}>Salesperson History</h1>
+            <h1 style={{ paddingTop: '60px', paddingBottom: '20px'}}>Salesperson History</h1>
             <select
                 onChange={handleSalespersonChange}
                 value={selectedSalesperson}

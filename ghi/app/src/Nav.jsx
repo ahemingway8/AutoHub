@@ -3,7 +3,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 function Nav() {
   return (
-    <nav className="navbar navbar-expand-lg bg-body-tertiary">
+    <nav className="navbar navbar-expand-lg navbar-custom fixed-top">
       <div className="container-fluid">
         <NavLink className="navbar-brand" to="/">CarCar</NavLink>
 
@@ -20,7 +20,7 @@ function Nav() {
                 href="#"
                 role="button"
                 data-bs-toggle="dropdown"
-                arira-expanded="false"
+                aria-expanded="false"
             >
               Manufacturers
             </a>
@@ -36,7 +36,7 @@ function Nav() {
                 href="#"
                 role="button"
                 data-bs-toggle="dropdown"
-                arira-expanded="false"
+                aria-expanded="false"
               >
                 Vehicle Models
               </a>
@@ -53,7 +53,7 @@ function Nav() {
                 href="#"
                 role="button"
                 data-bs-toggle="dropdown"
-                arira-expanded="false"
+                aria-expanded="false"
               >
                 Automobiles
               </a>
@@ -70,7 +70,7 @@ function Nav() {
                 href="#"
                 role="button"
                 data-bs-toggle="dropdown"
-                arira-expanded="false"
+                aria-expanded="false"
               >
                 Salespeople
               </a>
@@ -88,7 +88,7 @@ function Nav() {
                 href="#"
                 role="button"
                 data-bs-toggle="dropdown"
-                arira-expanded="false"
+                aria-expanded="false"
               >
                 Customers
               </a>
@@ -104,7 +104,7 @@ function Nav() {
                 href="#"
                 role="button"
                 data-bs-toggle="dropdown"
-                arira-expanded="false"
+                aria-expanded="false"
               >
                 Sales
               </a>
@@ -120,7 +120,7 @@ function Nav() {
                 href="#"
                 role="button"
                 data-bs-toggle="dropdown"
-                arira-expanded="false"
+                aria-expanded="false"
               >
                 Technicians
               </a>
@@ -137,7 +137,7 @@ function Nav() {
                 href="#"
                 role="button"
                 data-bs-toggle="dropdown"
-                arira-expanded="false"
+                aria-expanded="false"
               >
                 Services
               </a>

@@ -15,7 +15,7 @@ export default function VehicleModelsList() {
     return (
         <>
         <div>
-        <h1>Models</h1>
+        <h1 style={{paddingTop: '60px', paddingBottom: '20px'}}>Models</h1>
         <table className="table table-striped table-hover">
             <thead>
                 <tr>

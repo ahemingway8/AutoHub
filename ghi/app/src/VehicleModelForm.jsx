@@ -66,7 +66,7 @@ export default function ModelForm() {
     return (
         <>
         <div className="shadow mt-4 p-4">
-            <h1 className="text-center">Create a vehicle model</h1>
+            <h1 className="text-center" style={{paddingTop: '60px', paddingBottom: '20px'}}>Create a vehicle model</h1>
             <form onSubmit={handleFormSubmit}>
                 <div className="form-group">
                     <input className="form-control" placeholder="Model name..." type="text" id="name" name="name" value={ name } onChange={handleName} />

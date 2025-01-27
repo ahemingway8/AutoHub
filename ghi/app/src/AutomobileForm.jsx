@@ -75,7 +75,7 @@ function AutomobileForm() {
 
     return (
         <>
-            <h1 className="text-center" style={{ paddingTop: '20px', paddingBottom: '20px'}}>Add an Automobile to Inventory</h1>
+            <h1 className="text-center" style={{ paddingTop: '60px', paddingBottom: '20px'}}>Add an Automobile to Inventory</h1>
             <form onSubmit={handleSubmit} id="add-automobile-form">
                 <div className="form-floating mb-3">
                     <input

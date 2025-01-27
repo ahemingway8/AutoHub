@@ -44,7 +44,7 @@ export default function AppointmentList() {
     return (
         <>
         <div>
-        <h1>Service Appointments</h1>
+        <h1 style={{paddingTop: '60px', paddingBottom: '20px'}}>Service Appointments</h1>
         <table className="table table-striped table-hover">
             <thead>
                 <tr>

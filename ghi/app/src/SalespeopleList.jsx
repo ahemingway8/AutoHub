@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
+
 function SalespeopleList() {
     const [salespeople, setSalespeople] = useState([]);
 
@@ -27,7 +28,7 @@ function SalespeopleList() {
 
     return (
         <div>
-            <h1 style={{ paddingTop: '20px', paddingBottom: '20px'}}>Salespeople</h1>
+            <h1 style={{ paddingTop: '60px', paddingBottom: '20px'}}>Salespeople</h1>
             <table className="table table-striped">
                 <thead>
                     <tr>

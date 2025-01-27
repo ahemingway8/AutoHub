@@ -35,7 +35,7 @@ export default function ServiceHistory() {
     return (
         <>
         <div>
-            <h1>Service History</h1>
+            <h1 style={{paddingTop: '60px', paddingBottom: '20px'}}>Service History</h1>
             <form className="form-inline" onSubmit={ handleSearchSubmit } >
                 <input className="form-control mr-sm-2" type="search" value={vin} onChange={ handleVinChange } placeholder="Search by VIN..." aria-label="Search"/>
                 <button className="btn btn btn-outline-secondary my-2 my-sm-0" type="submit">Search</button>
