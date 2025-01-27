@@ -58,35 +58,13 @@ function SalesForm() {
         };
 
         try {
-            const saleResponse = await fetch(saleUrl, fetchConfig);
-            if (!saleResponse.ok) {
-                console.error('Failed to create sale');
-                return;
+            const response = await fetch(saleUrl, fetchConfig);
+            if (response.ok) {
+                setFormState(initialFormState);
+                navigate('/sales');
+            } else {
+                console.error('/sales');
             }
-
-            const automobileVin = formState.automobile;
-            const updateUrl = `http://localhost:8100/api/automobiles/${automobileVin}/`;
-            const updateConfig = {
-                method: 'PUT',
-                body: JSON.stringify({ sold: true }),
-                headers: {
-                    'Content-type': 'application/json',
-                },
-            };
-
-            try {
-                const updateResponse = await fetch(updateUrl, updateConfig);
-                if (updateResponse.ok) {
-                    setFormState(initialFormState);
-                    navigate('/sales');
-                } else {
-                    console.error('Failed to update automobile');
-
-                }
-            } catch (error) {
-                console.error('Error making PUT request:', error);
-            }
-
         } catch (error) {
             console.error('Error in submission process:', error);
         }

@@ -5,6 +5,7 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.core.exceptions import ObjectDoesNotExist
 from .models import AutomobileVO, Sale, Customer, Salesperson
+import requests
 
 class AutomobileVOEncoder(ModelEncoder):
     model = AutomobileVO
@@ -163,6 +164,12 @@ def sales_list(request):
             content = json.loads(request.body)
 
             automobile = AutomobileVO.objects.get(vin=content["automobile"])
+            if automobile.sold:
+                return JsonResponse(
+                    {"message": "This automobile has already been sold"},
+                    status=400,
+                )
+
             salesperson = Salesperson.objects.get(id=content["salesperson"])
             customer = Customer.objects.get(id=content["customer"])
 
@@ -173,15 +180,46 @@ def sales_list(request):
                 price=float(content["price"]),
             )
 
+            try:
+                response = requests.put(
+                    f'http://inventory-api:8000/api/automobiles/{automobile.vin}/',
+                    json={"sold": True},
+                    headers={'Content-Type': 'application/json'},
+                )
+
+                if response.ok:
+                    return JsonResponse(
+                        {"sale": sale},
+                        encoder=SalesEncoder,
+                        status=201
+                    )
+
+                else:
+                    print(f"Inventory update failed: {response.status_code} - {response.text}")
+                    sale.delete()
+                    return JsonResponse(
+                        {"message": f"Failed to update automobile status in inventory: {response.text}"},
+                        status=400
+                    )
+
+            except requests.RequestException as e:
+                print(f"Request failed: {str(e)}")
+                sale.delete()
+                return JsonResponse(
+                    {"message": f"Failed to communicate with inventory service: {str(e)}"},
+                    status=500
+                )
+
+        except AutomobileVO.DoesNotExist:
             return JsonResponse(
-                {"sale": sale},
-                encoder=SalesEncoder,
-                status=201
+                {"message": "Automobile not found"},
+                status=404
             )
         except Exception as e:
+            print(f"Sale creation failed: {str(e)}")
             return JsonResponse(
                 {"message": f"Error creating sale: {str(e)}"},
-                status=500,
+                status=500
             )
 
 
