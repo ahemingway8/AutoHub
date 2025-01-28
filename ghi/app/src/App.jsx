@@ -46,7 +46,7 @@ function App() {
 					<Route path="/appointments" element={<AppointmentList />} />
 					<Route path="/createappointment" element={<AppointmentForm />} />
 					<Route path="/servicehistory" element={<ServiceHistory />} />
-					
+
 				</Routes>
 			</div>
 		</BrowserRouter>

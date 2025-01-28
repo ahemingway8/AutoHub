@@ -3,10 +3,9 @@ import { useState, useEffect } from "react";
 export default function ServiceHistory() {
     const [ appointments, setAppointments ] = useState([]);
     const [ vin, setVin ] = useState('');
-    const [ error, setError ] = useState('');
 
     async function getAppointments() {
-        const url = 'http://localhost:8080/api/appointments/';
+        const url = 'http://localhost:8080/api/appointments/history/';
         const res = await fetch(url);
         const data = await res.json();
         setAppointments(data.appointments);
@@ -14,19 +13,18 @@ export default function ServiceHistory() {
 
     useEffect(() => {getAppointments()}, []);
 
-    function handleVinChange(e) {
-        setVin(e.target.value);
+    function handleClearSearch() {
+        setVin('');
+        getAppointments();
     }
 
     async function handleSearchSubmit(e) {
         e.preventDefault();
 
-        if(!vin) {
-            setError("Please enter VIN.");
-            return;
+        let url = 'http://localhost:8080/api/appointments/history/';
+        if (vin.trim()) {
+            url += `?vin=${vin}`;
         }
-
-        const url = `http://localhost:8080/api/appointments/?vin=${vin}`;
         const res = await fetch(url);
         const data = await res.json();
         setAppointments(data.appointments);
@@ -36,11 +34,25 @@ export default function ServiceHistory() {
         <>
         <div>
             <h1 style={{paddingTop: '60px', paddingBottom: '20px'}}>Service History</h1>
-            <form className="form-inline" onSubmit={ handleSearchSubmit } >
-                <input className="form-control mr-sm-2" type="search" value={vin} onChange={ handleVinChange } placeholder="Search by VIN..." aria-label="Search"/>
+            <form className="input-group mb-3" onSubmit={ handleSearchSubmit }>
+                <input
+                    className="form-control mr-sm-2"
+                    type="search"
+                    value={vin}
+                    onChange={(e) => setVin(e.target.value)}
+                    placeholder="Search by VIN..."
+                    aria-label="Search"
+                />
                 <button className="btn btn btn-outline-secondary my-2 my-sm-0" type="submit">Search</button>
+                <button
+                    className="btn btn-outline-seconday"
+                    type="button"
+                    onClick={handleClearSearch}
+                >
+                    Clear Search
+                </button>
             </form>
-            <table className="table table-striped table-hover">
+            <table className="table table-striped">
                 <thead>
                     <tr>
                         <th scope="col">VIN</th>

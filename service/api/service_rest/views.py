@@ -43,7 +43,7 @@ def appointments(request):
         if vin_search:
             appointments = Appointment.objects.filter(vin=vin_search)
         else:
-            appointments = Appointment.objects.filter(status="created")
+            appointments = Appointment.objects.filter(status="created").order_by('-date_time')
         return JsonResponse(
             {"appointments": appointments},
             encoder=AppointmentEncoder,
@@ -58,7 +58,7 @@ def appointments(request):
             if not technician_id:
                 return JsonResponse({"message": "Technician ID is required"}, status=400)
 
-            technician = Technician.objects.get(id=content['technician_id'])
+            technician = Technician.objects.get(id=technician_id)
 
             appointment = Appointment.objects.create(
                 vin=content['vin'],
@@ -135,3 +135,16 @@ def update_cancel(request, id):
                 {"message": "Appointment does not exist"},
                 status=404,
             )
+
+@require_http_methods(["GET"])
+def appointments_history(request):
+    vin_search = request.GET.get('vin')
+    if vin_search:
+        appointments = Appointment.objects.filter(vin=vin_search).order_by('-date_time')
+    else:
+        appointments = Appointment.objects.all().order_by('-date_time')
+    return JsonResponse(
+        {"appointments": appointments},
+        encoder=AppointmentEncoder,
+        safe=False,
+    )
