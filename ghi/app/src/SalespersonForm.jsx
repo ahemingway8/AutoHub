@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -10,7 +10,9 @@ const initialFormState = {
 
 
 function SalespersonForm() {
-    const [formState, setFormState] = useState(initialFormState);
+    const [ formState, setFormState ] = useState(initialFormState);
+    const [ loading, setLoading ] = useState(false);
+    const [ error, setError ] = useState('');
     const navigate = useNavigate();
 
     const handleInputChange = (event) => {
@@ -19,12 +21,15 @@ function SalespersonForm() {
             ...formState,
             [name]: value
         });
+        setError('');
     };
-
-
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+
+        setLoading(true);
+        setError('');
+
         const url = 'http://localhost:8090/api/salespeople/'
         const fetchConfig = {
             method: 'POST',
@@ -39,58 +44,101 @@ function SalespersonForm() {
             if (response.ok) {
                 navigate('/salespeople')
             } else {
-                console.error('Failed to add salesperson');
+                const data = await response.json();
+                setError(data.message || 'Failed to add salesperson');
             }
         } catch (error) {
-            console.error('Submission error:', error);
+            setError('An error occurred while submitting the form');
+        } finally {
+            setLoading(false);
         }
     };
 
     return (
-        <>
+        <div className="container mt-5">
+            <div className="row justify-content-center">
+                <div className="col-md-8 col-lg-6">
+                    <div className="card shadow">
+                        <div className="card-body p-4">
+                            <h1 className="text-center mb-4">Add a Salesperson</h1>
 
-            <h1 className="text-center" style={{ paddingTop: '60px', paddingBottom: '20px'}}>Add a Salesperson</h1>
-            <form onSubmit={handleSubmit} id="add-salesperson-form">
-                <div className="form-floating mb-3">
-                    <input
-                        onChange={handleInputChange}
-                        value={formState.employee_id}
-                        placeholder="Employee ID"
-                        required
-                        type="text"
-                        id="employee_id"
-                        name="employee_id"
-                        className="form-control"
-                    />
-                    <label htmlFor="employee_id">Employee ID</label>
+                            {error && (
+                                <div className="alert alert-danger mb-4" role="alert">
+                                    {error}
+                                </div>
+                            )}
+
+                            <form onSubmit={handleSubmit} className="needs-validation">
+                                <div className="form-floating mb-3">
+                                    <input
+                                        onChange={handleInputChange}
+                                        value={formState.employee_id}
+                                        placeholder="Employee ID"
+                                        required
+                                        type="text"
+                                        id="employee_id"
+                                        name="employee_id"
+                                        className="form-control"
+                                    />
+                                    <label htmlFor="employee_id">Employee ID</label>
+                                </div>
+
+                                <div className="form-floating mb-3">
+                                    <input
+                                        onChange={handleInputChange}
+                                        value={formState.first_name}
+                                        placeholder="First Name"
+                                        required
+                                        type="text"
+                                        id="first_name"
+                                        name="first_name"
+                                        className="form-control"
+                                    />
+                                    <label htmlFor="first_name">First Name</label>
+                                </div>
+
+                                <div className="form-floating mb-4">
+                                    <input
+                                        onChange={handleInputChange}
+                                        value={formState.last_name}
+                                        placeholder="Last Name"
+                                        required type="text"
+                                        id="last_name"
+                                        name="last_name"
+                                        className="form-control"
+                                    />
+                                    <label htmlFor="last_name">Last Name</label>
+                                </div>
+
+                                <div className="d-grid gap-2">
+                                    <button
+                                        className="btn btn-primary btn-lg"
+                                        type="submit"
+                                        disabled={loading}
+                                    >
+                                        {loading ? (
+                                            <>
+                                                <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                                                 Creating...
+                                            </>
+                                        ) : (
+                                            'Create Salesperson'
+                                        )}
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className="btn btn-outline-secondary"
+                                        onClick={() => navigate('/salespeople')}
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
-                <div className="form-floating mb-3">
-                    <input
-                        onChange={handleInputChange}
-                        value={formState.first_name}
-                        placeholder="First Name"
-                        required type="text"
-                        id="first_name"
-                        name="first_name"
-                        className="form-control"
-                    />
-                    <label htmlFor="first_name">First Name</label>
-                </div>
-                <div className="form-floating mb-3">
-                    <input
-                        onChange={handleInputChange}
-                        value={formState.last_name}
-                        placeholder="Last Name"
-                        required type="text"
-                        id="last_name"
-                        name="last_name"
-                        className="form-control"
-                    />
-                    <label htmlFor="last_name">Last Name</label>
-                </div>
-                <button className="btn btn-primary">Create</button>
-            </form>
-        </>
+            </div>
+        </div>
     );
 }
 
