@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'
 
 
@@ -14,7 +14,23 @@ function SalesForm() {
     const [ salespeople, setSalespeople ] = useState([]);
     const [ customers, setCustomers ] = useState([]);
     const [ formState, setFormState ] = useState(initialFormState);
+    const [ loading, setLoading ] = useState(false);
+    const [ error, setError ] = useState('');
+    const [ selectedAuto, setSelectedAuto ] = useState(null);
     const navigate = useNavigate();
+
+    const formatPrice = (price) => {
+        return new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD'
+        }).format(price);
+    };
+
+    const handleAutoSelect = (vin) => {
+        const auto = autos.find(a => a.vin === vin);
+        setSelectedAuto(auto);
+        handleInputChange({ target: { name: 'automobile', value: vin }});
+    };
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -47,101 +63,164 @@ function SalesForm() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        setLoading(true);
+        setError('');
 
-        const saleUrl = 'http://localhost:8090/api/sales/';
-        const fetchConfig = {
-            method: 'POST',
-            body: JSON.stringify(formState),
-            headers: {
-                'Content-type': 'application/json',
-            },
-        };
+        if (parseFloat(formState.price) <= 0) {
+            setError('Please enter a valid price');
+            setLoading(false);
+            return;
+        }
 
         try {
-            const response = await fetch(saleUrl, fetchConfig);
+            const response = await fetch('http://localhost:8090/api/sales/', {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json',
+                },
+                body: JSON.stringify(formState),
+            });
+
             if (response.ok) {
-                setFormState(initialFormState);
                 navigate('/sales');
             } else {
-                console.error('/sales');
+                const data = await response.json();
+                setError(data.message || 'Failed to create sale');
             }
         } catch (error) {
-            console.error('Error in submission process:', error);
+            setError('Network error occurred');
+        } finally {
+            setLoading(false);
         }
     };
 
-
     return (
-        <>
-            <h1 className="text-center" style={{ paddingTop: '60px', paddingBottom: '20px'}}>Record a New Sale</h1>
-            <form onSubmit={handleSubmit} id="add-sale-form">
-                <div className="mb-3">
-                    <select
-                        onChange={handleInputChange}
-                        value={formState.automobile}
-                        required
-                        name="automobile"
-                        id="automobile"
-                        className="form-select"
-                    >
-                        <option value="">Choose an automobile VIN</option>
-                        {autos.map(auto => (
-                            <option key={auto.vin} value={auto.vin}>
-                                {auto.vin}
-                            </option>
-                        ))}
-                    </select>
+        <div className="container mt-5">
+            <div className="row justify-content-center">
+                <div className="col-lg-8">
+                    <div className="card shadow">
+                        <div className="card-body p-4">
+                            <h1 className="text-center mb-4">Record a New Sale</h1>
+
+                            {error && (
+                                <div className="alert alert-danger">{error}</div>
+                            )}
+
+                            <form onSubmit={handleSubmit}>
+                                <div className="row g-3">
+                                    <div className="col-12">
+                                        <label className="form-label">Select Vehicle</label>
+                                        <select
+                                            className="form-select"
+                                            onChange={(e) => handleAutoSelect(e.target.value)}
+                                            value={formState.automobile}
+                                            required
+                                        >
+                                            <option value="">Choose a vehicle...</option>
+                                            {autos.map(auto => (
+                                                <option key={auto.vin} value={auto.vin}>
+                                                    {auto.year} {auto.model.manufacturer.name} {auto.model.name} - {auto.vin}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+
+                                    {selectedAuto && (
+                                        <div className="col-12">
+                                            <div className="card bg-light">
+                                                <div className="card-body">
+                                                    <h6 className="card-subtitle mb-2 text-muted">Selected Vehicle Details</h6>
+                                                    <p className="card-text">
+                                                        <strong>Model:</strong> {selectedAuto.model.name}<br />
+                                                        <strong>Make:</strong> {selectedAuto.model.manufacturer.name}<br />
+                                                        <strong>Year:</strong> {selectedAuto.year}<br />
+                                                        <strong>Color:</strong> {selectedAuto.color}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    <div className="col-md-6">
+                                        <label className="form-label">Salesperson</label>
+                                        <select
+                                            onChange={handleInputChange}
+                                            value={formState.salesperson}
+                                            required
+                                            name="salesperson"
+                                            className="form-select"
+                                        >
+                                            <option value="">Select salesperson...</option>
+                                            {salespeople.map(salesperson => (
+                                                <option key={salesperson.id} value={salesperson.id}>
+                                                    {salesperson.first_name} {salesperson.last_name} ({salesperson.employee_id})
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+
+                                    <div className="col-md-6">
+                                        <label className="form-label">Customer</label>
+                                        <select
+                                            onChange={handleInputChange}
+                                            value={formState.customer}
+                                            required
+                                            name="customer"
+                                            className="form-select"
+                                        >
+                                            <option value="">Select customer...</option>
+                                            {customers.map(customer => (
+                                                <option key={customer.id} value={customer.id}>
+                                                    {customer.first_name} {customer.last_name}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+
+                                    <div className="col-12">
+                                        <label className="form-label">Sale Price</label>
+                                        <div className="input-group">
+                                            <span className="input-group-text">$</span>
+                                            <input
+                                                type="number"
+                                                className="form-control"
+                                                onChange={handleInputChange}
+                                                value={formState.price}
+                                                name="price"
+                                                min="0"
+                                                step="0.01"
+                                                required
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="d-grid gap-2 mt-4">
+                                    <button
+                                        className="btn btn-primary"
+                                        disabled={loading}
+                                    >
+                                        {loading ? (
+                                            <>
+                                                <span className="spinner-border spinner-border-sm me-2" />
+                                                Processing...
+                                            </>
+                                        ) : 'Complete Sale'}
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className="btn btn-outline-secondary"
+                                        onClick={() => navigate('/sales')}
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
-                <div className="mb-3">
-                    <select
-                        onChange={handleInputChange}
-                        value={formState.salesperson}
-                        required
-                        name="salesperson"
-                        id="salesperson"
-                        className="form-select"
-                    >
-                        <option value="">Choose a salesperson</option>
-                        {salespeople.map(salesperson => (
-                            <option key={salesperson.id} value={salesperson.id}>
-                                {salesperson.first_name} {salesperson.last_name}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-                <div className="mb-3">
-                    <select
-                        onChange={handleInputChange}
-                        value={formState.customer}
-                        required
-                        name="customer"
-                        id="customer"
-                        className="form-select"
-                    >
-                        <option value="">Choose a customer</option>
-                        {customers.map(customer => (
-                            <option key={customer.id} value={customer.id}>
-                                {customer.first_name} {customer.last_name}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-                <div className="form-floating mb-3">
-                    <input
-                        onChange={handleInputChange}
-                        value={formState.price}
-                        placeholder="Price"
-                        required
-                        type="number"
-                        name="price"
-                        id="price"
-                        className="form-control"
-                    />
-                    <label htmlFor="price">Price</label>
-                </div>
-                <button className="btn btn-primary">Create</button>
-            </form>
-        </>
+            </div>
+        </div>
     );
 }
 
