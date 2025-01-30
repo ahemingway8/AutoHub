@@ -14,24 +14,37 @@ export default function ManufacturerList() {
 
     return (
         <>
-        <div>
-        <h1 style={{paddingTop: '60px', paddingBottom: '20px'}}>Manufacturers</h1>
-        <table className="table table-striped table-hover">
-            <thead>
-                <tr>
-                    <th scope="col">
-                        Name
-                    </th>
-                </tr>
-            </thead>
-            <tbody className="table-group-divider">
-                {manufacturers.map(manufacturer => (
-                <tr key={manufacturer.id}>
-                    <td>{ manufacturer.name}</td>
-                </tr>
-                ))}
-            </tbody>
-        </table>
+        <div className="container mt-5">
+            <div className="row mb-4">
+                <div className="col text-center">
+                    <h1 className="display-4 fw-bold">Manufacturers</h1>
+                </div>
+            </div>
+            <div className="row justify-content-center">
+                <div className="col-md-8">
+                    <div className="card-body shadow p-0">
+                        <table className="table table-primary table-striped mb-0">
+                            <thead className="table-light">
+                                <tr>
+                                    <th scope="col" className="py-3">Manafacturer Name</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {manufacturers.map(manufacturer => (
+                                    <tr key={manufacturer.id}>
+                                        <td className="py-3">{ manufacturer.name}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div className="text-center mt-4">
+                        <p className="text-muted">Total Manufacturers: {manufacturers.length}</p>
+                    </div>
+                </div>
+            </div>
+
+
         </div>
         </>
     );

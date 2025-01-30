@@ -44,24 +44,37 @@ function ManufacturerForm() {
     };
 
     return (
-        <>
-            <h1 className="text-center" style={{ paddingTop: '60px', paddingBottom: '20px'}}>Create a Manufacturer</h1>
-            <form onSubmit={handleSubmit} id="create-manufacturer-form">
-                <div className="form-floating mb-3">
-                    <input
-                        onChange={handleInputChange}
-                        value={formState.name}
-                        placeholder="Manufacturer Name"
-                        required type="text"
-                        id="name"
-                        name="name"
-                        className="form-control"
-                    />
-                    <label htmlFor="name">Manufacturer Name</label>
+        <div className="container mt-5">
+            <div className="row justify-content-center">
+                <div className="col-md-6">
+                    <div className="card shadow">
+                        <div className="card-body p-4">
+                            <h1 className="text-center mb-4">
+                                Create a Manufacturer
+                            </h1>
+                            <form onSubmit={handleSubmit} id="create-manufacturer-form">
+                                <div className="form-floating mb-4">
+                                    <input
+                                        onChange={handleInputChange}
+                                        value={formState.name}
+                                        placeholder="Manufacturer Name"
+                                        required
+                                        type="text"
+                                        id="name"
+                                        name="name"
+                                        className="form-control"
+                                    />
+                                    <label htmlFor="name">Manufacturer Name</label>
+                                </div>
+                                <button className="btn btn-primary w-100">
+                                    Create
+                                </button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
-                <button className="btn btn-primary">Create</button>
-            </form>
-        </>
+            </div>
+        </div>
     );
 }
 
