@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 function SalespersonHistory() {
-    const [salespeople, setSalespeople] = useState([]);
-    const [selectedSalesperson, setSelectedSalesperson] = useState("");
-    const [sales, setSales] = useState([]);
+    const [ salespeople, setSalespeople ] = useState([]);
+    const [ selectedSalesperson, setSelectedSalesperson ] = useState("");
+    const [ sales, setSales ] = useState([]);
+    const [ loading, setLoading ] = useState(false);
+    const [ stats, setStats ] = useState(null);
 
     useEffect(() => {
         const fetchSalespeople = async () => {
@@ -35,50 +37,92 @@ function SalespersonHistory() {
 
     }, [selectedSalesperson]);
 
+    useEffect(() => {
+        if (selectedSalesperson && sales.length > 0) {
+            const totalSales = sales.length;
+            const totalValue = sales.reduce((sum, sale) => sum + sale.price, 0);
+            const avgValue = totalValue / totalSales;
+            setStats({ totalSales, totalValue, avgValue });
+        }
+    }, [sales]);
 
     const handleSalespersonChange = (event) => {
         setSelectedSalesperson(event.target.value);
     };
 
     return (
-        <div>
-            <h1 style={{ paddingTop: '60px', paddingBottom: '20px'}}>Salesperson History</h1>
-            <select
-                onChange={handleSalespersonChange}
-                value={selectedSalesperson}
-                name="salesperson"
-                id="salesperson"
-                className="form-select"
-            >
-                <option value="">Choose a salesperson</option>
-                {salespeople.map((salesperson) => (
-                    <option key={salesperson.id} value={salesperson.id}>
-                        {salesperson.first_name} {salesperson.last_name}
-                    </option>
-                ))}
-            </select>
-            <div>
-                <table className="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Salesperson</th>
-                            <th>Customer</th>
-                            <th>VIN</th>
-                            <th>Price</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {sales.map((sale) => (
-                            <tr key={sale.id}>
-                                <td>{sale.salesperson.first_name} {sale.salesperson.last_name}</td>
-                                <td>{sale.customer.first_name} {sale.customer.last_name}</td>
-                                <td>{sale.automobile.vin}</td>
-                                <td>{`$${ sale.price }`}</td>
-                            </tr>
+        <div className="container mt-5">
+            <h1 className="display-4 mb-4">Salesperson History</h1>
+            <div className="row mb-4">
+                <div className="col-md-6">
+                    <select
+                        onChange={handleSalespersonChange}
+                        value={selectedSalesperson}
+                        name="salesperson"
+                        id="salesperson"
+                        className="form-select form-select-lg"
+                    >
+                        <option value="">Choose a salesperson</option>
+                        {salespeople.map((salesperson) => (
+                            <option key={salesperson.id} value={salesperson.id}>
+                                {salesperson.first_name} {salesperson.last_name}
+                            </option>
                         ))}
-                    </tbody>
-                </table>
+                    </select>
+                </div>
             </div>
+            {selectedSalesperson && stats && (
+                <div className="row mb-4">
+                    <div className="col-md-4">
+                        <div className="card bg-primary text-white">
+                            <div className="card-body">
+                                <h5 className="card-title">Total Sales</h5>
+                                <h2>{stats.totalSales}</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-md-4">
+                        <div className="card bg-success text-white">
+                            <div className="card-body">
+                                <h5 className="card-title">Total Value</h5>
+                                <h2>${stats.totalValue.toLocaleString()}</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-md-4">
+                        <div className="card bg-info text-white">
+                            <div className="card-body">
+                                <h5 className="card-title">Average Sales</h5>
+                                <h2>${stats.avgValue.toLocaleString(undefined, { maximumFractionDigits: 2 })}</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {sales.length > 0 && (
+                <div className="col-md-8">
+                    <div className="card-body shadow p-0">
+                        <table className="table table-primary table-striped mb-0">
+                            <thead className="table-light">
+                                <tr>
+                                    <th>Customer</th>
+                                    <th>VIN</th>
+                                    <th className="text-end">Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {sales.map((sale) => (
+                                    <tr key={sale.id}>
+                                        <td>{sale.customer.first_name} {sale.customer.last_name}</td>
+                                        <td>{sale.automobile.vin}</td>
+                                        <td className="text-end">${sale.price.toLocaleString()}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
