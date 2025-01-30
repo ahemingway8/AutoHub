@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -11,7 +11,9 @@ const initialFormState = {
 
 
 function CustomerForm() {
-    const [formState, setFormState] = useState(initialFormState);
+    const [ formState, setFormState ] = useState(initialFormState);
+    const [ loading, setLoading ] = useState(false);
+    const [ error, setError ] = useState('');
     const navigate = useNavigate();
 
     const handleInputChange = (event) => {
@@ -24,6 +26,7 @@ function CustomerForm() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        setLoading(true);
         const url = 'http://localhost:8090/api/customers/'
         const fetchConfig = {
             method: 'POST',
@@ -38,69 +41,111 @@ function CustomerForm() {
             if (response.ok) {
                 navigate('/customers')
             } else {
-                console.error('Failed to add customer');
+                setError('Failed to add customer');
             }
         } catch (error) {
-            console.error('Submission error:', error);
+            setError('Network error occurred');
+        } finally {
+            setLoading(false);
         }
     };
 
-
     return (
-        <>
-            <h1 className="text-center" style={{ paddingTop: '60px', paddingBottom: '20px'}}>Add a Customer</h1>
-            <form onSubmit={handleSubmit} id="add-customer-form">
-                <div className="form-floating mb-3">
-                    <input
-                        onChange={handleInputChange}
-                        value={formState.first_name}
-                        placeholder="First Name"
-                        required type="text"
-                        id="first_name"
-                        name="first_name"
-                        className="form-control"
-                    />
-                    <label htmlFor="first_name">First Name</label>
+        <div className="container mt-5">
+            <div className="row justify-content-center">
+                <div className="col-md-8">
+                    <div className="card shadow">
+                        <div className="card-body p-4">
+                            <h1 className="text-center mb-4">Add a Customer</h1>
+                            <form onSubmit={handleSubmit}>
+                                <div className="row g-3">
+                                    <div className="col-md-6">
+                                        <div className="form-floating">
+                                            <input
+                                                onChange={handleInputChange}
+                                                value={formState.first_name}
+                                                placeholder="First Name"
+                                                required
+                                                type="text"
+                                                id="first_name"
+                                                name="first_name"
+                                                className="form-control"
+                                            />
+                                            <label htmlFor="first_name">First Name</label>
+                                        </div>
+                                    </div>
+                                    <div className="col-md-6">
+                                        <div className="form-floating">
+                                            <input
+                                                onChange={handleInputChange}
+                                                value={formState.last_name}
+                                                placeholder="Last Name"
+                                                required
+                                                type="text"
+                                                id="last_name"
+                                                name="last_name"
+                                                className="form-control"
+                                            />
+                                            <label htmlFor="last_name">Last Name</label>
+                                        </div>
+                                    </div>
+                                    <div className="col-12">
+                                        <div className="form-floating">
+                                            <input
+                                                onChange={handleInputChange}
+                                                value={formState.phone_number}
+                                                placeholder="Phone Number"
+                                                required
+                                                type="text"
+                                                id="phone_number"
+                                                name="phone_number"
+                                                className="form-control"
+                                            />
+                                            <label htmlFor="phone_number">Phone Number</label>
+                                        </div>
+                                    </div>
+                                    <div className="col-12">
+                                        <div className="form-floating">
+                                            <textarea
+                                                onChange={handleInputChange}
+                                                value={formState.address}
+                                                placeholder="Address"
+                                                required
+                                                id="address"
+                                                name="address"
+                                                className="form-control"
+                                                style={{height: '100px'}}
+                                            />
+                                            <label htmlFor="address">Address</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="d-grid gap-2 mt-4">
+                                    <button
+                                        className="btn btn-primary"
+                                        disabled={loading}
+                                    >
+                                        {loading ? (
+                                            <>
+                                                <span className="spinner-border spinner-border-sm me-2" />
+                                                Creating...
+                                            </>
+                                        ) : 'Create Customer'}
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className="btn btn-outline-secondary"
+                                        onClick={() => navigate('/customers')}
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
-                <div className="form-floating mb-3">
-                    <input
-                        onChange={handleInputChange}
-                        value={formState.last_name}
-                        placeholder="Last Name"
-                        required type="text"
-                        id="last_name"
-                        name="last_name"
-                        className="form-control"
-                    />
-                    <label htmlFor="last_name">Last Name</label>
-                </div>
-                <div className="form-floating mb-3">
-                    <input
-                        onChange={handleInputChange}
-                        value={formState.phone_number}
-                        placeholder="Phone Number"
-                        required type="text"
-                        id="phone_number"
-                        name="phone_number"
-                        className="form-control"
-                    />
-                    <label htmlFor="phone_number">Phone Number</label>
-                </div>
-                <div className="form-floating mb-3">
-                    <textarea
-                        onChange={handleInputChange}
-                        value={formState.address}
-                        placeholder="Address"
-                        required
-                        id="address"
-                        name="address"
-                        className="form-control"
-                    />
-                    <label htmlFor="address">Address</label>
-                </div>
-                <button className="btn btn-primary">Create</button>
-            </form>
-        </>
+            </div>
+        </div>
     );
 }
 
