@@ -18,6 +18,37 @@ export default function AppointmentList() {
         }
     }
 
+    async function appointmentCancel(id) {
+        const url = `http://localhost:8080/api/appointments/${id}/cancel/`;
+        const fetchOptions = {
+            method: "PUT",
+            headers: {'Content-Type': "application/json"},
+        };
+        const res = await fetch(url, fetchOptions);
+        if (res.ok) {
+            setLoading(true);
+            getAppointments();
+        } else {
+            console.error("error canceling appointment.");
+        }
+
+    }
+
+    async function appointmentFinish(id) {
+        const url = `http://localhost:8080/api/appointments/${id}/finish/`;
+        const fetchOptions = {
+            method: "PUT",
+            headers: {'Content-Type': "application/json"},
+        };
+        const res = await fetch(url, fetchOptions);
+        if (res.ok) {
+            setLoading(true);
+            getAppointments();
+        } else {
+            console.error("Could not process finish.")
+        }
+    }
+
     const filteredAppointments = appointments.filter(appointment => {
         const searchLower = searchTerm.toLowerCase();
         return (
@@ -60,18 +91,18 @@ export default function AppointmentList() {
             ) : filteredAppointments.length === 0 ? (
                 <div className="alert alert-info">No appointments found</div>
             ) : (
-                <div className="col-md-8">
+                <div className="card border-0">
                     <div className="card-body shadow p-0">
-                        <table className="table table-primary table-striped mb-0">
+                        <table className="table table-striped table-bordered mb-0">
                             <thead className="table-light">
                                 <tr>
-                                    <th>VIN</th>
-                                    <th>Status</th>
-                                    <th>Customer</th>
-                                    <th>Date/Time</th>
-                                    <th>Technician</th>
-                                    <th>Reason</th>
-                                    <th>Actions</th>
+                                    <th className="text-center">VIN</th>
+                                    <th className="text-center">Status</th>
+                                    <th className="text-center">Customer</th>
+                                    <th className="text-center">Date/Time</th>
+                                    <th className="text-center">Technician</th>
+                                    <th className="text-center">Reason</th>
+                                    <th className="text-center">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -79,27 +110,27 @@ export default function AppointmentList() {
                                     const date = new Date(appointment.date_time);
                                     return (
                                         <tr key={appointment.id}>
-                                            <td>{appointment.vin}</td>
-                                            <td>
+                                            <td className="text-center">{appointment.vin}</td>
+                                            <td className="text-center">
                                                 {appointment.vip &&
-                                                    <span className="badge bg-warning me-2">VIP</span>
+                                                    <span className="badge bg-primary me-2">VIP</span>
                                                 }
                                             </td>
-                                            <td>{appointment.customer}</td>
-                                            <td>
+                                            <td className="text-center">{appointment.customer}</td>
+                                            <td className="text-center">
                                                 {date.toLocaleDateString()} at{' '}
                                                 {date.toLocaleDateString([], {
                                                     hour: '2-digit',
                                                     minute: '2-digit'
                                                 })}
                                             </td>
-                                            <td>
+                                            <td className="text-center">
                                                 {appointment.technician ?
                                                     `${appointment.technician.first_name} ${appointment.technician.last_name}`
                                                     : "N/A"}
                                             </td>
-                                            <td>{appointment.reason}</td>
-                                            <td>
+                                            <td className="text-center">{appointment.reason}</td>
+                                            <td className="text-center">
                                                 <div className="btn-group btn-group-sm">
                                                     <button
                                                         className="btn btn-outline-danger"
