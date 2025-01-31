@@ -2,70 +2,121 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function TechnicianForm() {
-    const [ first_name, setFirstName ] = useState('');
-    const [ last_name, setLastName ] = useState('');
-    const [ employee_id, setEmployeeId ] = useState('');
+    const [ formData, setFormData ] = useState({
+        first_name: '',
+        last_name: '',
+        employee_id: '',
+    });
+    const [ loading, setLoading ] = useState(false);
+    const [ error, setError ] = useState('');
     const navigate = useNavigate();
 
-    function handleFirstName(e) {
-        setFirstName(e.target.value)
-    }
-    function handleLastName(e) {
-        setLastName(e.target.value)
-    }
-    function handleEmployeeId(e) {
-        setEmployeeId(e.target.value)
-    }
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+        setError('');
+    };
 
-    function resetFormState() {
-        setFirstName('')
-        setLastName('')
-        setEmployeeId('')
-    }
-
-    async function handleFormSubmit(e) {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const data = {
-            first_name,
-            last_name,
-            employee_id,
-        };
+        try {
+            const response = await fetch('http://localhost:8080/api/technicians/', {
+                method: 'POST',
+                headers: {'Content-Type': "application/json"},
+                body: JSON.stringify(formData),
+            });
 
-        const url = 'http://localhost:8080/api/technicians/';
-        const fetchOptions = {
-            method: 'POST',
-            headers: {'Content-Type': "application/json"},
-            body: JSON.stringify(data),
-        };
-
-        const res = await fetch(url, fetchOptions);
-        if (res.ok) {
-            resetFormState();
-            navigate('/technicians');
-        } else {
-            console.error("Error creating technician.");
+            if (response.ok) {
+                navigate('/technicians');
+            } else {
+                const data = await response.json();
+                setError(data.message || 'Failed to create technician');
+            }
+        } catch (err) {
+            setError('Network error occurred');
+        } finally {
+            setLoading(false);
         }
-    }
+    };
+
     return (
-        <>
-        <div className="shadow mt-4 p-4">
-            <h1 className="text-center" style={{paddingTop: '60px', paddingBottom: '20px'}}>Add a Technician</h1>
-            <form onSubmit={handleFormSubmit}>
-            <div className="form-group">
-                    <input className="form-control" placeholder="First name..." type="text" id="first_name" name="first_name" value={ first_name } onChange={handleFirstName} />
+        <div className="container mt-5">
+            <div className="row justify-content-center">
+                <div className="col-md-8 col-lg-6">
+                    <div className="card shadow">
+                        <div className="card-body p-4">
+                            <h1 className="text-center mb-4">Add a Technician</h1>
+
+                            {error && (
+                                <div className="alert alert-danger" role="alert">
+                                    {error}
+                                </div>
+                            )}
+
+                            <form onSubmit={handleSubmit}>
+                                <div className="mb-3">
+                                    <label className="form-label">Employee ID</label>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        name="employee_id"
+                                        value={formData.employee_id}
+                                        onChange={handleInputChange}
+                                        required
+                                    />
+                                </div>
+                                <div className="mb-3">
+                                    <label className="form-label">First Name</label>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        name="first_name"
+                                        value={formData.first_name}
+                                        onChange={handleInputChange}
+                                        required
+                                    />
+                                </div>
+                                <div className="mb-3">
+                                    <label className="form-label">Last Name</label>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        name="last_name"
+                                        value={formData.last_name}
+                                        onChange={handleInputChange}
+                                        required
+                                    />
+                                </div>
+                                <div className="d-grid gap-2">
+                                    <button
+                                        type="submit"
+                                        className="btn btn-primary"
+                                        disabled={loading}
+                                    >
+                                        {loading ? (
+                                            <>
+                                                <span className="spinner-border spinner-border-sm me-2" />
+                                                Creating...
+                                            </>
+                                        ) : 'Create Technician'}
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className="btn btn-outline-secondary"
+                                        onClick={() => navigate('/technicians')}
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
-                <div className="form-group">
-                    <input className="form-control" placeholder="Last name..." type="text" id="last_name" name="last_name" value={ last_name } onChange={handleLastName} />
-                </div>
-                <div className="form-group">
-                    <input className="form-control" placeholder="Employee ID..." type="text" id="employee_id" name="employee_id" value={ employee_id } onChange={handleEmployeeId} />
-                </div>
-                <div>
-                <button type="submit" className="btn btn-primary">Create</button>
-                </div>
-            </form>
+            </div>
         </div>
-        </>
     );
 }
