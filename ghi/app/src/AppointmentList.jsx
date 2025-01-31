@@ -3,86 +3,126 @@ import { useState, useEffect } from "react";
 
 export default function AppointmentList() {
     const [ appointments, setAppointments ] = useState([]);
+    const [ loading, setLoading ] = useState(true);
+    const [ searchTerm, setSearchTerm ] = useState('');
 
     async function getAppointments() {
-        const url = 'http://localhost:8080/api/appointments/';
-        const res = await fetch(url);
-        const { appointments } = await res.json();
-        setAppointments(appointments);
+        try {
+            const res = await fetch('http://localhost:8080/api/appointments/');
+            const data = await res.json();
+            setAppointments(data.appointments);
+        } catch (error) {
+            console.error('Error fetching appointments:', error);
+        } finally {
+            setLoading(false);
+        }
     }
+
+    const filteredAppointments = appointments.filter(appointment => {
+        const searchLower = searchTerm.toLowerCase();
+        return (
+            appointment.vin.toLowerCase().includes(searchLower) ||
+            appointment.customer.toLowerCase().includes(searchLower) ||
+            appointment.reason.toLowerCase().includes(searchLower)
+        );
+    });
 
     useEffect(() => {getAppointments()}, []);
 
-    async function appointmentCancel(id) {
-        const url = `http://localhost:8080/api/appointments/${id}/cancel/`;
-        const fetchOptions = {
-            method: "PUT",
-            headers: {'Content-Type': "application/json"},
-        };
-        const res = await fetch(url, fetchOptions);
-        if (res.ok) {
-            getAppointments();
-        } else {
-            console.error("Error canceling appointment.");
-        }
-    }
-
-    async function appointmentFinish(id) {
-        const url = `http://localhost:8080/api/appointments/${id}/finish/`;
-        const fetchOptions = {
-            method: "PUT",
-            headers: {'Content-Type': "application/json"},
-        };
-        const res = await fetch(url, fetchOptions);
-        if (res.ok) {
-            getAppointments();
-        } else {
-            console.error("Could not process finish.");
-        }
-    }
-
     return (
-        <>
-        <div>
-        <h1 style={{paddingTop: '60px', paddingBottom: '20px'}}>Service Appointments</h1>
-        <table className="table table-striped table-hover">
-            <thead>
-                <tr>
-                    <th scope="col">VIN</th>
-                    <th scope="col">Is VIP?</th>
-                    <th scope="col">Customer</th>
-                    <th scope="col">Date</th>
-                    <th scope="col">Time</th>
-                    <th scope="col">Technician</th>
-                    <th scope="col">Reason</th>
-                    <th scope="col"></th>
-                </tr>
-            </thead>
-            <tbody className="table-group-divider">
-                {appointments.map(appointment => {
-                    const date = new Date(appointment.date_time);
-                    const formattedDate = date.toLocaleDateString();
-                    const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        <div className="container mt-5">
+            <div className="d-flex justify-content-between align-items-center mb-4">
+                <h1>Service Appointments</h1>
+                <div className="card bg-light">
+                    <div className="card-body p-2 d-flex gap-3">
+                        <span>Total Active: <strong>{appointments.length}</strong></span>
+                        <span>VIP Customers: <strong>{appointments.filter(a => a.vip).length}</strong></span>
+                    </div>
+                </div>
+            </div>
 
-                    return (
-                        <tr key={ appointment.id }>
-                            <td>{ appointment.vin }</td>
-                            <td>{ appointment.vip ? "Yes": "No" }</td>
-                            <td>{ appointment.customer }</td>
-                            <td>{ formattedDate }</td>
-                            <td>{ formattedTime }</td>
-                            <td>{ appointment.technician ? `${appointment.technician.first_name} ${appointment.technician.last_name}` : "N/A"}</td>
-                            <td>{ appointment.reason }</td>
-                            <td>
-                            <button type="submit" className="btn btn-danger" onClick={() => appointmentCancel(appointment.id)}>Cancel</button>
-                            <button type="submit" className="btn btn-success" onClick={() => appointmentFinish(appointment.id)}>Finish</button>
-                            </td>
-                        </tr>
-                );
-            })}
-            </tbody>
-        </table>
+            <div className="mb-4">
+                <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Search by VIN, customer, or reason..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
+            </div>
+
+            {loading ? (
+                <div className="text-center py-5">
+                    <div className="spinner-border text-primary" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            ) : filteredAppointments.length === 0 ? (
+                <div className="alert alert-info">No appointments found</div>
+            ) : (
+                <div className="col-md-8">
+                    <div className="card-body shadow p-0">
+                        <table className="table table-primary table-striped mb-0">
+                            <thead className="table-light">
+                                <tr>
+                                    <th>VIN</th>
+                                    <th>Status</th>
+                                    <th>Customer</th>
+                                    <th>Date/Time</th>
+                                    <th>Technician</th>
+                                    <th>Reason</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {filteredAppointments.map(appointment => {
+                                    const date = new Date(appointment.date_time);
+                                    return (
+                                        <tr key={appointment.id}>
+                                            <td>{appointment.vin}</td>
+                                            <td>
+                                                {appointment.vip &&
+                                                    <span className="badge bg-warning me-2">VIP</span>
+                                                }
+                                            </td>
+                                            <td>{appointment.customer}</td>
+                                            <td>
+                                                {date.toLocaleDateString()} at{' '}
+                                                {date.toLocaleDateString([], {
+                                                    hour: '2-digit',
+                                                    minute: '2-digit'
+                                                })}
+                                            </td>
+                                            <td>
+                                                {appointment.technician ?
+                                                    `${appointment.technician.first_name} ${appointment.technician.last_name}`
+                                                    : "N/A"}
+                                            </td>
+                                            <td>{appointment.reason}</td>
+                                            <td>
+                                                <div className="btn-group btn-group-sm">
+                                                    <button
+                                                        className="btn btn-outline-danger"
+                                                        onClick={() => appointmentCancel(appointment.id)}
+                                                    >
+                                                        Cancel
+                                                    </button>
+                                                    <button
+                                                        className="btn btn-outline-success"
+                                                        onClick={() => appointmentFinish(appointment.id)}
+                                                    >
+                                                        Complete
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            )}
         </div>
-        </>
     );
 }
