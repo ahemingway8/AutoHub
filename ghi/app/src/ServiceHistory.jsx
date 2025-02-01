@@ -48,13 +48,14 @@ export default function ServiceHistory() {
                     <div>
                         <div className="card-body p-0">
                             <div className="d-flex justify-content-around align-items-center gap-3 border border-black p-2">
-                                <div>Total: <span className="fs-5 fw-bold">{stats.total}</span></div>
+                                <div>Total: <span className="fs-5 fw-bold"> {stats.total}</span></div>
                                 <div className="vr"></div>
-                                <div>Completed: <span className="fs-5 fw-bold">{stats.completed}</span></div>
+                                <div>Completed: <span className="fs-5 fw-bold"> {stats.completed}</span></div>
                                 <div className="vr"></div>
-                                <div>Canceled: <span className="fs-5 fw-bold">{stats.canceled}</span></div>
+                                <div>Canceled: <span className="fs-5 fw-bold"> {stats.canceled}</span></div>
                                 <div className="vr"></div>
-                                <div>VIP: <span className="fs-5 fw-bold">{stats.vip}</span></div>
+                                <div><i className="bi bi-star-fill"></i> VIP: <span className="fs-5 fw-bold"> {stats.vip}</span></div>
+                                <div></div>
                             </div>
                         </div>
                     </div>
@@ -97,12 +98,12 @@ export default function ServiceHistory() {
                             <table className="table table-striped table-bordered mb-0">
                                 <thead className="table-light">
                                     <tr>
-                                        <th className="px-3 py-3">VIN</th>
-                                        <th className="px-3 py-3">Status</th>
-                                        <th className="px-3 py-3">Customer</th>
-                                        <th className="px-3 py-3">Date/Time</th>
-                                        <th className="px-3 py-3">Technician</th>
-                                        <th className="px-3 py-3">Reason</th>
+                                        <th className="text-center">VIN</th>
+                                        <th className="text-center">Status</th>
+                                        <th className="text-center">Customer</th>
+                                        <th className="text-center">Date/Time</th>
+                                        <th className="text-center">Technician</th>
+                                        <th className="text-center">Reason</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -110,34 +111,37 @@ export default function ServiceHistory() {
                                         const date = new Date(appointment.date_time);
                                         return (
                                             <tr key={appointment.id}>
-                                                <td className="px-3 py-3">{appointment.vin}</td>
-                                                <td className="px-3 py-3">
+                                                <td className="text-center">{appointment.vin}</td>
+                                                <td className="text-center">
                                                     <div className="d-flex justify-content-between align-items-center">
                                                         <span className={`${
                                                             appointment.status === 'finished' ? 'text-success' :
                                                             appointment.status === 'canceled' ? 'text-danger' :
                                                             'text-black'
                                                         } fw-medium`}>
-                                                            {appointment.status.charAt(0).toUpperCase() + appointment.status.slice(1)}
+                                                            {appointment.status === 'finished' ? 'Completed' :
+                                                            appointment.status === 'canceled' ? 'Canceled' :
+                                                            appointment.status === 'created' ? 'Scheduled' :
+                                                            appointment.status}
                                                         </span>
-                                                        <span className="text-primary fw-bold" style={{minWidth: '40px'}}>
-                                                            {appointment.vip ? 'VIP' : ''}
-                                                        </span>
+                                                        {appointment.vip && (
+                                                            <span><i className="bi bi-star-fill"></i></span>
+                                                        )}
                                                     </div>
                                                 </td>
-                                                <td className="px-3 py-3">{appointment.customer}</td>
-                                                <td className="px-3 py-3">
+                                                <td className="text-center">{appointment.customer}</td>
+                                                <td className="text-center">
                                                     {date.toLocaleDateString()} {date.toLocaleDateString([], {
                                                         hour: '2-digit',
                                                         minute: '2-digit'
                                                     })}
                                                 </td>
-                                                <td className="px-3 py-3">
+                                                <td className="text-center">
                                                     {appointment.technician ?
                                                         `${appointment.technician.first_name} ${appointment.technician.last_name}`
                                                         : "N/A"}
                                                 </td>
-                                                <td className="px-3 py-3">{appointment.reason}</td>
+                                                <td className="text-center">{appointment.reason}</td>
                                             </tr>
                                         );
                                     })}

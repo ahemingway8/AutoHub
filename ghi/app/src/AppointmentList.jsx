@@ -67,7 +67,8 @@ export default function AppointmentList() {
                 <div className="card bg-light">
                     <div className="card-body p-2 d-flex gap-3">
                         <span>Total Active: <strong>{appointments.length}</strong></span>
-                        <span>VIP Customers: <strong>{appointments.filter(a => a.vip).length}</strong></span>
+                        <div className="vr"></div>
+                        <span><i className="bi bi-star-fill"></i> VIP Customers: <strong>{appointments.filter(a => a.vip).length}</strong></span>
                     </div>
                 </div>
             </div>
@@ -113,7 +114,7 @@ export default function AppointmentList() {
                                             <td className="text-center">{appointment.vin}</td>
                                             <td className="text-center">
                                                 {appointment.vip &&
-                                                    <span className="badge bg-primary me-2">VIP</span>
+                                                    <span><i className="bi bi-star-fill"></i> VIP</span>
                                                 }
                                             </td>
                                             <td className="text-center">{appointment.customer}</td>
