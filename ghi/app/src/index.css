@@ -67,14 +67,24 @@ div {
 	box-shadow: 0 4px 15px rgba(0,0,0,.2)
 }
 
+.dropdown-header {
+	font-weight: 600;
+	color: #d6dfff !important;
+	padding: 0.5rem 1rem;
+}
+
 .dropdown-item {
 	color: white !important;
-	padding: 0.7rem 1.5rem;
-	transition: all 0.3s ease;
+	padding: 0.5rem 1rem;
+	transition: all 0.2s ease;
 }
 
 .dropdown-item:hover {
 	background-color: var(--secondary-color) !important;
+}
+
+.dropdown-divider {
+	margin: 0.5rem 0;
 }
 
 .hero-section {
