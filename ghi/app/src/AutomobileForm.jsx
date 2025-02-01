@@ -13,7 +13,7 @@ const initialFormState = {
 function AutomobileForm() {
     const [ models, setModels ] = useState([]);
     const [ formState, setFormState ] = useState(initialFormState);
-    const [ error, setError ] = useState('');
+    const [ setError ] = useState('');
     const [ loading, setLoading ] = useState(false);
     const navigate = useNavigate();
 

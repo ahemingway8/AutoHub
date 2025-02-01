@@ -13,7 +13,7 @@ const initialFormState = {
 function CustomerForm() {
     const [ formState, setFormState ] = useState(initialFormState);
     const [ loading, setLoading ] = useState(false);
-    const [ error, setError ] = useState('');
+    const [ setError ] = useState('');
     const navigate = useNavigate();
 
     const handleInputChange = (event) => {

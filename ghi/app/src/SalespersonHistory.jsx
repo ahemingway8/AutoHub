@@ -4,7 +4,6 @@ function SalespersonHistory() {
     const [ salespeople, setSalespeople ] = useState([]);
     const [ selectedSalesperson, setSelectedSalesperson ] = useState("");
     const [ sales, setSales ] = useState([]);
-    const [ loading, setLoading ] = useState(false);
     const [ stats, setStats ] = useState(null);
 
     useEffect(() => {
@@ -100,22 +99,22 @@ function SalespersonHistory() {
                 </div>
             )}
             {sales.length > 0 && (
-                <div className="col-md-8">
+                <div className="card border-0">
                     <div className="card-body shadow p-0">
-                        <table className="table table-primary table-striped mb-0">
+                        <table className="table table-striped table-bordered mb-0">
                             <thead className="table-light">
                                 <tr>
-                                    <th>Customer</th>
-                                    <th>VIN</th>
-                                    <th className="text-end">Price</th>
+                                    <th className="text-center">Customer</th>
+                                    <th className="text-center">VIN</th>
+                                    <th className="text-center">Price</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {sales.map((sale) => (
                                     <tr key={sale.id}>
-                                        <td>{sale.customer.first_name} {sale.customer.last_name}</td>
-                                        <td>{sale.automobile.vin}</td>
-                                        <td className="text-end">${sale.price.toLocaleString()}</td>
+                                        <td className="text-center">{sale.customer.first_name} {sale.customer.last_name}</td>
+                                        <td className="text-center">{sale.automobile.vin}</td>
+                                        <td className="text-center">${sale.price.toLocaleString()}</td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -125,6 +124,6 @@ function SalespersonHistory() {
             )}
         </div>
     );
-};
+}
 
 export default SalespersonHistory;

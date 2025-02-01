@@ -125,7 +125,7 @@ export default function ServiceHistory() {
                                                             appointment.status}
                                                         </span>
                                                         {appointment.vip && (
-                                                            <span><i className="bi bi-star-fill"></i></span>
+                                                            <span><i className="bi bi-star-fill"></i> VIP</span>
                                                         )}
                                                     </div>
                                                 </td>

@@ -71,9 +71,9 @@ export default function TechnicianList() {
                         </div>
                     </div>
 
-                    <div className="col-md-8">
+                    <div className="card border-0">
                         <div className="card-body shadow p-0">
-                            <table className="table table-primary table-striped mb-0">
+                            <table className="table table-striped table-bordered mb-0">
                                 <thead className="table-light">
                                     <th onClick={() => handleSort('employee_id')} style={{cursor: 'pointer'}}>
                                         Employee ID {sortField === 'employee_id' && (sortDirection === 'asc' ? '↑' : '↓')}

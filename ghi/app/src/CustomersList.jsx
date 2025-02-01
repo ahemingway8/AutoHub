@@ -73,9 +73,9 @@ function CustomersList() {
                     </div>
                 </div>
             </div>
-            <div className="col-md-8">
+            <div className="card border-0">
                 <div className="card-body shadow p-0">
-                    <table className="table table-primary table-striped mb-0">
+                    <table className="table table-striped table-bordered mb-0">
                         <thead className="table-light">
                             <tr>
                                 {['first_name', 'last_name', 'phone_number', 'address'].map(field => (
@@ -83,7 +83,7 @@ function CustomersList() {
                                         key={field}
                                         onClick={() => handleSort(field)}
                                         style={{cursor: 'pointer'}}
-                                        className="user-select-none"
+                                        className="user-select-none text-center"
                                     >
                                         {field.split('_').map(word =>
                                             word.charAt(0).toUpperCase() + word.slice(1)
@@ -113,10 +113,10 @@ function CustomersList() {
                             ) : (
                                 sortedAndFilteredCustomers.map(customer => (
                                     <tr key={ customer.id }>
-                                        <td>{ customer.first_name }</td>
-                                        <td>{ customer.last_name }</td>
-                                        <td>{ customer.phone_number }</td>
-                                        <td>{ customer.address }</td>
+                                        <td className="text-center">{ customer.first_name }</td>
+                                        <td className="text-center">{ customer.last_name }</td>
+                                        <td className="text-center">{ customer.phone_number }</td>
+                                        <td className="text-center">{ customer.address }</td>
                                     </tr>
                                 ))
                             )}

@@ -115,32 +115,34 @@ function AutomobilesList() {
                     ))}
                 </div>
             ) : (
-                <div className="table-responsive">
-                    <table className="table table-primary">
-                        <thead>
-                            <tr>
-                                <th>VIN</th>
-                                <th>Color</th>
-                                <th>Year</th>
-                                <th>Model</th>
-                                <th>Manufacturer</th>
-                                <th>Sold</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {autos.map(auto => (
+                <div className="card border-0">
+                    <div className="card-body shadow p-0">
+                        <table className="table table-striped table-bordered mb-0">
+                            <thead className="table-light">
+                                <tr>
+                                    <th className="text-center">VIN</th>
+                                    <th className="text-center">Color</th>
+                                    <th className="text-center">Year</th>
+                                    <th className="text-center">Model</th>
+                                    <th className="text-center">Manufacturer</th>
+                                    <th className="text-center">Sold</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {autos.map(auto => (
 
-                                    <tr key={ auto.color + auto.vin }>
-                                        <td>{ auto.vin }</td>
-                                        <td>{ auto.color }</td>
-                                        <td>{ auto.year }</td>
-                                        <td>{ auto.model.name }</td>
-                                        <td>{ auto.model.manufacturer.name }</td>
-                                        <td>{ auto.sold ? 'Yes' : 'No' }</td>
-                                    </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                                        <tr key={ auto.color + auto.vin }>
+                                            <td className="text-center">{ auto.vin }</td>
+                                            <td className="text-center">{ auto.color }</td>
+                                            <td className="text-center">{ auto.year }</td>
+                                            <td className="text-center">{ auto.model.name }</td>
+                                            <td className="text-center">{ auto.model.manufacturer.name }</td>
+                                            <td className="text-center">{ auto.sold ? 'Yes' : 'No' }</td>
+                                        </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             )}
         </div>

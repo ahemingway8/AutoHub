@@ -21,18 +21,18 @@ export default function ManufacturerList() {
                 </div>
             </div>
             <div className="row justify-content-center">
-                <div className="col-md-8">
+                <div className="card border-0">
                     <div className="card-body shadow p-0">
-                        <table className="table table-primary table-striped mb-0">
+                        <table className="table table-striped table-bordered mb-0">
                             <thead className="table-light">
                                 <tr>
-                                    <th scope="col" className="py-3">Manafacturer Name</th>
+                                    <th scope="col" className="text-center">Manafacturer Name</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {manufacturers.map(manufacturer => (
                                     <tr key={manufacturer.id}>
-                                        <td className="py-3">{ manufacturer.name}</td>
+                                        <td className="text-center py-3">{ manufacturer.name}</td>
                                     </tr>
                                 ))}
                             </tbody>

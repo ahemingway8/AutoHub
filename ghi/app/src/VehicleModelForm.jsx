@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function ModelForm() {
-    const [ models, setModels ] = useState([])
     const [ name, setName ] = useState('');
     const [ manufacturers, setManufacturers ] = useState([]);
     const [ manufacturer_id, setManufacturer ] = useState('');
@@ -55,9 +54,6 @@ export default function ModelForm() {
     }
     function handleManufacturer(e) {
         setManufacturer(e.target.value)
-    }
-    function handlePictureUrl(e) {
-        setPictureUrl(e.target.value)
     }
 
     function resetFormState() {
