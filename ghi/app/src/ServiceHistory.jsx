@@ -99,6 +99,7 @@ export default function ServiceHistory() {
                                 <thead className="table-light">
                                     <tr>
                                         <th className="text-center">VIN</th>
+                                        <th className="text-center">VIP</th>
                                         <th className="text-center">Status</th>
                                         <th className="text-center">Customer</th>
                                         <th className="text-center">Date/Time</th>
@@ -112,8 +113,10 @@ export default function ServiceHistory() {
                                         return (
                                             <tr key={appointment.id}>
                                                 <td className="text-center">{appointment.vin}</td>
+                                                <td className="text-center align-middle">
+                                                    {appointment.vip && <i className="bi bi-star-fill text-primary"></i>}
+                                                </td>
                                                 <td className="text-center">
-                                                    <div className="d-flex justify-content-between align-items-center">
                                                         <span className={`${
                                                             appointment.status === 'finished' ? 'text-success' :
                                                             appointment.status === 'canceled' ? 'text-danger' :
@@ -124,14 +127,10 @@ export default function ServiceHistory() {
                                                             appointment.status === 'created' ? 'Scheduled' :
                                                             appointment.status}
                                                         </span>
-                                                        {appointment.vip && (
-                                                            <span><i className="bi bi-star-fill"></i> VIP</span>
-                                                        )}
-                                                    </div>
                                                 </td>
                                                 <td className="text-center">{appointment.customer}</td>
                                                 <td className="text-center">
-                                                    {date.toLocaleDateString()} {date.toLocaleDateString([], {
+                                                    {date.toLocaleDateString()} {date.toLocaleTimeString([], {
                                                         hour: '2-digit',
                                                         minute: '2-digit'
                                                     })}
