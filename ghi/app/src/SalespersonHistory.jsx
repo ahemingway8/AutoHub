@@ -42,8 +42,10 @@ function SalespersonHistory() {
             const totalValue = sales.reduce((sum, sale) => sum + sale.price, 0);
             const avgValue = totalValue / totalSales;
             setStats({ totalSales, totalValue, avgValue });
+        } else {
+            setStats(null);
         }
-    }, [sales]);
+    }, [sales, selectedSalesperson]);
 
     const handleSalespersonChange = (event) => {
         setSelectedSalesperson(event.target.value);

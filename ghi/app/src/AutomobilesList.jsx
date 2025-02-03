@@ -129,7 +129,7 @@ function AutomobilesList() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {autos.map(auto => (
+                                {filteredAutos.map(auto => (
 
                                         <tr key={ auto.color + auto.vin }>
                                             <td className="text-center">{ auto.vin }</td>
