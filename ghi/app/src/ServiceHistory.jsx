@@ -54,7 +54,7 @@ export default function ServiceHistory() {
                                 <div className="vr"></div>
                                 <div>Canceled: <span className="fs-5 fw-bold"> {stats.canceled}</span></div>
                                 <div className="vr"></div>
-                                <div><i className="bi bi-star-fill"></i> VIP: <span className="fs-5 fw-bold"> {stats.vip}</span></div>
+                                <div><i className="bi bi-star-fill text-primary"></i> VIP: <span className="fs-5 fw-bold"> {stats.vip}</span></div>
                                 <div></div>
                             </div>
                         </div>
