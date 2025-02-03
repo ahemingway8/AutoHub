@@ -188,11 +188,11 @@ export default function AppointmentForm() {
                                             onChange={handleInputChange}
                                             required
                                             rows="3"
-                                            placeholder="Describe the servicee needed"
+                                            placeholder="Describe the service needed"
                                         />
                                     </div>
 
-                                    <div className="d-grd gap-2 mt-4">
+                                    <div className="d-grid gap-2 mt-4">
                                         <button
                                             type="submit"
                                             className="btn btn-primary"

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 
 
 export default function AppointmentList() {
@@ -18,15 +18,14 @@ export default function AppointmentList() {
         }
     }
 
+    const statusUpdateOptions = {
+        method: "PUT",
+        headers: {'Content-Type': "application/json"},
+    };
+
     async function appointmentCancel(id) {
-        const url = `http://localhost:8080/api/appointments/${id}/cancel/`;
-        const fetchOptions = {
-            method: "PUT",
-            headers: {'Content-Type': "application/json"},
-        };
-        const res = await fetch(url, fetchOptions);
+        const res = await fetch(`http://localhost:8080/api/appointments/${id}/cancel/`, statusUpdateOptions);
         if (res.ok) {
-            setLoading(true);
             getAppointments();
         } else {
             console.error("error canceling appointment.");
@@ -35,12 +34,7 @@ export default function AppointmentList() {
     }
 
     async function appointmentFinish(id) {
-        const url = `http://localhost:8080/api/appointments/${id}/finish/`;
-        const fetchOptions = {
-            method: "PUT",
-            headers: {'Content-Type': "application/json"},
-        };
-        const res = await fetch(url, fetchOptions);
+        const res = await fetch(`http://localhost:8080/api/appointments/${id}/finish/`, statusUpdateOptions);
         if (res.ok) {
             setLoading(true);
             getAppointments();
@@ -58,6 +52,8 @@ export default function AppointmentList() {
         );
     });
 
+    const vipCount = useMemo(() => appointments.filter(a => a.vip).length, [appointments]);
+
     useEffect(() => {getAppointments()}, []);
 
     return (
@@ -68,7 +64,10 @@ export default function AppointmentList() {
                     <div className="card-body p-2 d-flex gap-3">
                         <span>Total Active: <strong>{appointments.length}</strong></span>
                         <div className="vr"></div>
-                        <span><i className="bi bi-star-fill text-primary"></i> VIP Customers: <strong>{appointments.filter(a => a.vip).length}</strong></span>
+                        <span>
+                            <i className="bi bi-star-fill text-primary"></i>
+                            VIP Customers: <strong>{vipCount}</strong>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -98,7 +97,7 @@ export default function AppointmentList() {
                             <thead className="table-light">
                                 <tr>
                                     <th className="text-center">VIN</th>
-                                    <th className="text-center">Status</th>
+                                    <th className="text-center">VIP Status</th>
                                     <th className="text-center">Customer</th>
                                     <th className="text-center">Date/Time</th>
                                     <th className="text-center">Technician</th>
