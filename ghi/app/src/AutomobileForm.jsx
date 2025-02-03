@@ -13,7 +13,7 @@ const initialFormState = {
 function AutomobileForm() {
     const [ models, setModels ] = useState([]);
     const [ formState, setFormState ] = useState(initialFormState);
-    const [ setError ] = useState('');
+    const [ error, setError ] = useState('');
     const [ loading, setLoading ] = useState(false);
     const navigate = useNavigate();
 
@@ -34,15 +34,16 @@ function AutomobileForm() {
                 const data = await response.json();
                 setModels(data.models);
             } else {
-                console.error("Error fetching models")
+                setError("Error fetching models")
             }
         } catch (error) {
-            console.error('Error fetching models:', error);
+            setError('Error fetching models: ' + error.message);
         }
     };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        setLoading(true);
 
         const requestData = {
             ...formState,
@@ -86,13 +87,20 @@ function AutomobileForm() {
                         <div className="card-body p-4">
                             <h1 className="text-center mb-4">Add an Automobile to Inventory</h1>
 
+                            {error && (
+                                <div className="alert alert-danger" role="alert">
+                                    {error}
+                                </div>
+                            )}
+                            
                             <form onSubmit={handleSubmit} id="add-automobile-form">
                                 <div className="form-floating mb-3">
                                     <input
                                         onChange={handleInputChange}
                                         value={formState.color}
                                         placeholder="Color"
-                                        required type="text"
+                                        required
+                                        type="text"
                                         id="color"
                                         name="color"
                                         className='form-control'
@@ -104,9 +112,12 @@ function AutomobileForm() {
                                         onChange={handleInputChange}
                                         value={formState.year}
                                         placeholder="Year"
-                                        required type="number"
+                                        required
+                                        type="number"
                                         id="year"
                                         name="year"
+                                        min="1900"
+                                        max={new Date().getFullYear() + 1}
                                         className='form-control'
                                     />
                                     <label htmlFor="year">Year</label>
@@ -116,7 +127,8 @@ function AutomobileForm() {
                                         onChange={handleInputChange}
                                         value={formState.vin}
                                         placeholder="VIN"
-                                        required type="text"
+                                        required
+                                        type="text"
                                         id="vin"
                                         name="vin"
                                         className='form-control'

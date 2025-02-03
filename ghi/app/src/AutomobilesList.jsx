@@ -6,21 +6,24 @@ function AutomobilesList() {
     const [ viewMode, setViewMode ] = useState('cards');
     const [ searchTerm, setSearchTerm ] = useState('');
     const [ filterSold, setFilterSold ] = useState('all');
+    const [ loading, setLoading ] = useState(true);
+    const [ error, setError ] = useState('');
 
     const fetchAutos = async () => {
         const url = 'http://localhost:8100/api/automobiles/';
 
         try {
             const response = await fetch(url);
-
             if (response.ok) {
                 const data = await response.json();
                 setAutos(data.autos);
             } else {
-                console.error('Error fetching data:', response.statusText);
+                setError('Error fetching data: ', response.statusText);
             }
         } catch (error) {
-            console.error('fetch error', error);
+            setError('Network error: ', error.message);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -39,6 +42,26 @@ function AutomobilesList() {
     useEffect(() => {
         fetchAutos();
     }, []);
+
+    if (loading) {
+        return (
+            <div className="container mt-5 text-center">
+                <div className="spinner-border text-primary" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="container mt-5">
+                <div className="alert alert-danger" role="alert">
+                    {error}
+                </div>
+            </div>
+        );
+    }
 
 
     return (
@@ -82,8 +105,11 @@ function AutomobilesList() {
                     </select>
                 </div>
             </div>
-            {viewMode === 'cards' ? (
-               <div className="row g-4">
+
+            {filteredAutos.length === 0 ? (
+                <div className="alert alert-info">No automobiles found</div>
+            ) : viewMode === 'cards' ? (
+                <div className="row g-4">
                     {filteredAutos.map(auto => (
                         <div className="col-md-4" key={auto.vin}>
                             <div className="card h-100 shadow-sm">
@@ -95,7 +121,7 @@ function AutomobilesList() {
                                         style={{ height: '200px', objectFit: 'cover' }}
                                     />
                                     <span className={`position-absolute top-0 end-0 m-2 badge ${auto.sold ? 'bg-danger' : 'bg-success'}`}>
-                                        {auto.sold ? 'Sold' : 'Availble'}
+                                        {auto.sold ? 'Sold' : 'Available'}
                                     </span>
                                 </div>
                                 <div className="card-body">
@@ -131,14 +157,14 @@ function AutomobilesList() {
                             <tbody>
                                 {filteredAutos.map(auto => (
 
-                                        <tr key={ auto.color + auto.vin }>
-                                            <td className="text-center">{ auto.vin }</td>
-                                            <td className="text-center">{ auto.color }</td>
-                                            <td className="text-center">{ auto.year }</td>
-                                            <td className="text-center">{ auto.model.name }</td>
-                                            <td className="text-center">{ auto.model.manufacturer.name }</td>
-                                            <td className="text-center">{ auto.sold ? 'Yes' : 'No' }</td>
-                                        </tr>
+                                    <tr key={ auto.vin }>
+                                        <td className="text-center">{ auto.vin }</td>
+                                        <td className="text-center">{ auto.color }</td>
+                                        <td className="text-center">{ auto.year }</td>
+                                        <td className="text-center">{ auto.model.name }</td>
+                                        <td className="text-center">{ auto.model.manufacturer.name }</td>
+                                        <td className="text-center">{ auto.sold ? 'Yes' : 'No' }</td>
+                                    </tr>
                                 ))}
                             </tbody>
                         </table>
