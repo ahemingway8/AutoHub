@@ -1,39 +1,32 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 
 function SalesList() {
     const [ sales, setSales ] = useState([]);
     const [ loading, setLoading ] = useState(true);
+    const [ error, setError ] = useState('');
     const [ searchTerm, setSearchTerm ] = useState('');
     const [ sortConfig, setSortConfig ] = useState({ key: null, direction: 'asc' });
-    const [ totalSales, setTotalSales ] = useState(0);
 
     const fetchSales = async () => {
-        const url = 'http://localhost:8090/api/sales/';
-
         try {
-            const response = await fetch(url);
-
+            const response = await fetch('http://localhost:8090/api/sales/');
             if (response.ok) {
                 const data = await response.json();
                 setSales(data.sales);
             } else {
-                console.error('Error fetching data:', response.statusText);
+                setError('Error fetching data:', response.statusText);
             }
         } catch (error) {
-            console.error('fetch error', error);
+            setError(error.message);
         } finally {
             setLoading(false);
         }
     };
 
-    useEffect(() => {
-        const total = sales.reduce((sum, sale) => sum + sale.price, 0);
-        setTotalSales(total);
-    }, [sales]);
-
-    useEffect(() => {
-        fetchSales();
-    }, []);
+    const totalSales = useMemo(() =>
+        sales.reduce((sum, sale) => sum + sale.price, 0),
+        [sales]
+    );
 
     const handleSort = (key) => {
         setSortConfig(prev => ({
@@ -71,6 +64,18 @@ function SalesList() {
                 aVal > bVal ? 1 : -1
             ) * (sortConfig.direction === 'asc' ? 1 : -1);
         });
+
+        useEffect(() => {
+            fetchSales();
+        }, []);
+
+        if (error) {
+            return (
+                <div className="container mt-5">
+                    <div className="alert alert-danger" role="alert">{error}</div>
+                </div>
+            );
+        }
 
     return (
         <div className="container mt-5">

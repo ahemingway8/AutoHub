@@ -6,8 +6,8 @@ const initialFormState = {
     automobile: '',
     salesperson: '',
     customer: '',
-    price: 0
-}
+    price: ''
+};
 
 function SalesForm() {
     const [ autos, setAutos ] = useState([]);
@@ -18,27 +18,6 @@ function SalesForm() {
     const [ error, setError ] = useState('');
     const [ selectedAuto, setSelectedAuto ] = useState(null);
     const navigate = useNavigate();
-
-    const formatPrice = (price) => {
-        return new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD'
-        }).format(price);
-    };
-
-    const handleAutoSelect = (vin) => {
-        const auto = autos.find(a => a.vin === vin);
-        setSelectedAuto(auto);
-        handleInputChange({ target: { name: 'automobile', value: vin }});
-    };
-
-    const handleInputChange = (event) => {
-        const { name, value } = event.target;
-        setFormState({
-            ...formState,
-            [name]: value
-        });
-    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -61,12 +40,27 @@ function SalesForm() {
         fetchData();
     }, []);
 
+    const handleAutoSelect = (vin) => {
+        const auto = autos.find(a => a.vin === vin);
+        setSelectedAuto(auto);
+        handleInputChange({ target: { name: 'automobile', value: vin }});
+    };
+
+    const handleInputChange = (event) => {
+        const { name, value } = event.target;
+        setFormState({
+            ...formState,
+            [name]: value
+        });
+    };
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         setLoading(true);
         setError('');
 
-        if (parseFloat(formState.price) <= 0) {
+        const price = parseFloat(formState.price);
+        if (isNaN(price) || price <= 0) {
             setError('Please enter a valid price');
             setLoading(false);
             return;
