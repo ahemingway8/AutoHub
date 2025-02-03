@@ -7,13 +7,12 @@ const initialFormState = {
     last_name: '',
     phone_number: '',
     address: ''
-}
-
+};
 
 function CustomerForm() {
     const [ formState, setFormState ] = useState(initialFormState);
     const [ loading, setLoading ] = useState(false);
-    const [ setError ] = useState('');
+    const [ error, setError ] = useState('');
     const navigate = useNavigate();
 
     const handleInputChange = (event) => {
@@ -27,21 +26,22 @@ function CustomerForm() {
     const handleSubmit = async (event) => {
         event.preventDefault();
         setLoading(true);
-        const url = 'http://localhost:8090/api/customers/'
-        const fetchConfig = {
-            method: 'POST',
-            body: JSON.stringify(formState),
-            headers: {
-                'Content-type': 'application/json',
-            },
-        };
+        setError('');
 
         try {
-            const response = await fetch(url, fetchConfig);
+            const response = await fetch('http://localhost:8090/api/customers/', {
+                method: 'POST',
+                body: JSON.stringify(formState),
+                headers: {
+                'Content-type': 'application/json',
+                },
+            });
+
             if (response.ok) {
                 navigate('/customers')
             } else {
-                setError('Failed to add customer');
+                const data = await response.json();
+                setError(data.message || 'Failed to add customer');
             }
         } catch (error) {
             setError('Network error occurred');
@@ -57,6 +57,11 @@ function CustomerForm() {
                     <div className="card shadow">
                         <div className="card-body p-4">
                             <h1 className="text-center mb-4">Add a Customer</h1>
+                            {error && (
+                                <div className="alert alert-danger" role="alert">
+                                    {error}
+                                </div>
+                            )}
                             <form onSubmit={handleSubmit}>
                                 <div className="row g-3">
                                     <div className="col-md-6">

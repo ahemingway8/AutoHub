@@ -1,31 +1,31 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
+
 
 function CustomersList() {
     const [ customers, setCustomers ] = useState([]);
     const [ searchTerm, setSearchTerm ] = useState('');
     const [ sortBy, setSortBy ] = useState({ field: null, direction: 'asc' });
     const [ loading, setLoading ] = useState(true);
+    const [ error, setError ] = useState('');
 
     const fetchCustomers = async () => {
-        const url = 'http://localhost:8090/api/customers/';
-
         try {
-            const response = await fetch(url);
-
+            const response = await fetch('http://localhost:8090/api/customers/');
             if (response.ok) {
                 const data = await response.json();
                 setCustomers(data.customers);
             } else {
-                console.error('Error fetching data:', response.statusText);
+                setError('Error fetching data: ' + response.statusText);
             }
         } catch (error) {
-            console.error('fetch error', error);
+            setError('Network error: ' + error.message);
         } finally {
             setLoading(false);
         }
     };
 
-    const sortedAndFilteredCustomers = customers
+    const sortedAndFilteredCustomers = useMemo(() => {
+        return customers
         .filter(customer =>
             customer.first_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
             customer.last_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -37,6 +37,8 @@ function CustomersList() {
             const direction = sortBy.direction === 'asc' ? 1 : -1;
             return a[sortBy.field] > b[sortBy.field] ? direction : -direction;
         });
+    }, [customers, searchTerm, sortBy]);
+
 
     const handleSort = (field) => {
         setSortBy(prev => ({
@@ -48,6 +50,21 @@ function CustomersList() {
     useEffect(() => {
         fetchCustomers();
     }, []);
+
+    if (error) {
+        return (
+            <div className="container mt-5">
+                <div className="alert alert-danger">{error}</div>
+            </div>
+        );
+    }
+
+    const columnHeaders = [
+        { field: 'first_name', label: 'First Name' },
+        { field: 'last_name', label: 'Last Name' },
+        { field: 'phone_number', label: 'Phone Number' },
+        { field: 'address', label: 'Address' }
+    ];
 
     return (
         <div className="container mt-5">
@@ -78,16 +95,14 @@ function CustomersList() {
                     <table className="table table-striped table-bordered mb-0">
                         <thead className="table-light">
                             <tr>
-                                {['first_name', 'last_name', 'phone_number', 'address'].map(field => (
+                                {columnHeaders.map(({ field, label }) => (
                                     <th
                                         key={field}
                                         onClick={() => handleSort(field)}
                                         style={{cursor: 'pointer'}}
                                         className="user-select-none text-center"
                                     >
-                                        {field.split('_').map(word =>
-                                            word.charAt(0).toUpperCase() + word.slice(1)
-                                        ).join(' ')}
+                                        {label}
                                         {sortBy.field === field && (
                                             <i className={`bi bi-arrow-${sortBy.direction === 'asc' ? 'up' : 'down'} ms-1`}></i>
                                         )}
