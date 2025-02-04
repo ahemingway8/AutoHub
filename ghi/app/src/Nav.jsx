@@ -66,14 +66,14 @@ function Nav() {
         <div className="collapse navbar-collapse" id="navbarNavDropdown">
           <ul className="navbar-nav ms-auto">
             <li className="nav-item dropdown mx-2">
-              <a
+              <button
                 className="nav-link dropdown-toggle"
-                href="#"
+                role="button"
                 data-bs-toggle="dropdown"
               >
                 <i className="bi bi-box me-1"></i>
                 Inventory
-              </a>
+              </button>
               <ul className="dropdown-menu dropdown-menu-end custom-dropdown">
                 {inventoryItems.map((group, idx) => (
                   <div key={idx}>

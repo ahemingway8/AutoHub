@@ -75,15 +75,17 @@ export default function TechnicianList() {
                         <div className="card-body shadow p-0">
                             <table className="table table-striped table-bordered mb-0">
                                 <thead className="table-light">
-                                    <th onClick={() => handleSort('employee_id')} style={{cursor: 'pointer'}}>
-                                        Employee ID {sortField === 'employee_id' && (sortDirection === 'asc' ? '↑' : '↓')}
-                                    </th>
-                                    <th onClick={() => handleSort('first_name')} style={{cursor: 'pointer'}}>
-                                        First Name {sortField === 'first_name' && (sortDirection === 'asc' ? '↑' : '↓')}
-                                    </th>
-                                    <th onClick={() => handleSort('last_name')} style={{cursor: 'pointer'}}>
-                                        Last Name {sortField === 'last_name' && (sortDirection === 'asc' ? '↑' : '↓')}
-                                    </th>
+                                    <tr>
+                                        <th onClick={() => handleSort('employee_id')} style={{cursor: 'pointer'}}>
+                                            Employee ID {sortField === 'employee_id' && (sortDirection === 'asc' ? '↑' : '↓')}
+                                        </th>
+                                        <th onClick={() => handleSort('first_name')} style={{cursor: 'pointer'}}>
+                                            First Name {sortField === 'first_name' && (sortDirection === 'asc' ? '↑' : '↓')}
+                                        </th>
+                                        <th onClick={() => handleSort('last_name')} style={{cursor: 'pointer'}}>
+                                            Last Name {sortField === 'last_name' && (sortDirection === 'asc' ? '↑' : '↓')}
+                                        </th>
+                                    </tr>
                                 </thead>
                                 <tbody>
                                     {loading ? (

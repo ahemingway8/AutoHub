@@ -27,10 +27,6 @@ div {
 	padding-top: 20px;
 }
 
-.h1-custom {
-	color:#3D52A0;
-}
-
 .custom-navbar {
 	background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
 	padding: 1rem 0;
@@ -144,4 +140,9 @@ div {
 
 .shadow {
 	box-shadow: 0 2px 10px rgba(0,0,0,.1) !important;
+}
+
+.stats-card {
+	background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+	color: white !important;
 }

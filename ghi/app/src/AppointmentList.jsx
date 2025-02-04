@@ -54,7 +54,9 @@ export default function AppointmentList() {
 
     const vipCount = useMemo(() => appointments.filter(a => a.vip).length, [appointments]);
 
-    useEffect(() => {getAppointments()}, []);
+    useEffect(() => {
+        getAppointments()
+    }, []);
 
     return (
         <div className="container mt-5">

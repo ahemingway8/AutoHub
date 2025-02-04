@@ -28,17 +28,15 @@ export default function VehicleModelsList() {
         <div className="container mt-5">
             <div className="row mb-4">
                 <div className="col">
-                    <h1 style={{paddingTop: '60px', paddingBottom: '20px'}}>Models</h1>
+                    <h1>Models</h1>
                     <div className="row g-3 mb-4">
-                        <div className="row g-3 mb-4">
-                            <input
-                                type="text"
-                                className="form-control"
-                                placeholder="Search models..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                            />
-                        </div>
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Search models..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
                         <div className="col-md-6">
                             <select
                                 className="form-select"

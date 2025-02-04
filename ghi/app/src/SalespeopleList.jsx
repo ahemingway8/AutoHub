@@ -4,23 +4,25 @@ import { useEffect, useState } from 'react';
 function SalespeopleList() {
     const [ salespeople, setSalespeople ] = useState([]);
     const [ searchTerm, setSearchTerm ] = useState('');
-    const [ sortField, setSortField ] = useState('employee_id')
+    const [ loading, setLoading ] = useState(true);
+    const [ error, setError ] = useState('');
+    const [ sortField, setSortField ] = useState('employee_id');
     const [ sortDirection, setSortDirection ] = useState('asc');
 
     const fetchSalespeople = async () => {
-        const url = 'http://localhost:8090/api/salespeople/';
-
         try {
-            const response = await fetch(url);
+            const response = await fetch('http://localhost:8090/api/salespeople/');
 
             if (response.ok) {
                 const data = await response.json();
                 setSalespeople(data.salespeople);
             } else {
-                console.error('Error fetching data:', response.statusText);
+                setError('Error fetching data:', response.statusText);
             }
         } catch (error) {
-            console.error('fetch error', error);
+            setError('fetch error', error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -47,6 +49,22 @@ function SalespeopleList() {
     useEffect(() => {
         fetchSalespeople();
     }, []);
+
+    if (loading) {
+        return (
+            <div className="container mt-5 text-center">
+                <div className="spinner-border"></div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="container mt-5">
+                <div className="alert alert-danger">{error}</div>
+            </div>
+        );
+    }
 
     return (
         <div className="container mt-5">

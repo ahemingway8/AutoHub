@@ -75,7 +75,7 @@ function SalespersonHistory() {
             {selectedSalesperson && stats && (
                 <div className="row mb-4">
                     <div className="col-md-4">
-                        <div className="card bg-primary text-white">
+                        <div className="card stats-card">
                             <div className="card-body">
                                 <h5 className="card-title">Total Sales</h5>
                                 <h2>{stats.totalSales}</h2>
@@ -83,7 +83,7 @@ function SalespersonHistory() {
                         </div>
                     </div>
                     <div className="col-md-4">
-                        <div className="card bg-success text-white">
+                        <div className="card stats-card">
                             <div className="card-body">
                                 <h5 className="card-title">Total Value</h5>
                                 <h2>${stats.totalValue.toLocaleString()}</h2>
@@ -91,7 +91,7 @@ function SalespersonHistory() {
                         </div>
                     </div>
                     <div className="col-md-4">
-                        <div className="card bg-info text-white">
+                        <div className="card stats-card">
                             <div className="card-body">
                                 <h5 className="card-title">Average Sales</h5>
                                 <h2>${stats.avgValue.toLocaleString(undefined, { maximumFractionDigits: 2 })}</h2>
@@ -100,7 +100,7 @@ function SalespersonHistory() {
                     </div>
                 </div>
             )}
-            {sales.length > 0 && (
+            {selectedSalesperson && sales.length > 0 && (
                 <div className="card border-0">
                     <div className="card-body shadow p-0">
                         <table className="table table-striped table-bordered mb-0">
