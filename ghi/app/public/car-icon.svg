@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="256" height="256" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 256">
+    <defs>
+        <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#2c3e50"/>
+            <stop offset="100%" stop-color="#3498db"/>
+        </linearGradient>
+    </defs>
+    <g>
+        <!-- Outer Circle with background -->
+        <circle cx="128" cy="128" r="120" fill="#3498db" />
+
+        <!-- Car body -->
+        <rect x="50" y="100" width="156" height="56" fill="url(#gradient1)" rx="12" />
+
+        <!-- Headlights -->
+        <circle cx="70" cy="125" r="8" fill="white" />
+        <circle cx="186" cy="125" r="8" fill="white" />
+
+        <!-- Front grille -->
+        <rect x="110" y="150" width="36" height="8" fill="gray" />
+
+        <!-- Wheels -->
+        <circle cx="70" cy="165" r="12" fill="black" />
+        <circle cx="186" cy="165" r="12" fill="black" />
+    </g>
+</svg>

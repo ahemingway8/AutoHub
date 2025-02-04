@@ -51,7 +51,7 @@ function Nav() {
       <div className="container">
         <NavLink className="navbar-brand fw-bold d-flex align-items-center" to="/">
           <i className="bi bi-car-front me-2"></i>
-          CarCar
+          AutoHub
         </NavLink>
 
         <button

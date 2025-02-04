@@ -2,7 +2,7 @@ function MainPage() {
   return (
     <div className="hero-section px-4 py-5 my-5 text-center">
       <div className="container py-5">
-        <h1 className="display-3 fw-bold text-primary mb-4">CarCar</h1>
+        <h1 className="display-3 fw-bold text-primary mb-4">AutoHub</h1>
         <div className="col-lg-8 mx-auto">
           <p className="lead mb-4 fs-2 text-secondary">
             The premiere solution for automobile dealership
