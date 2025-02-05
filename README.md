@@ -1,21 +1,16 @@
-# CarCar
+# AutoHub
 
-CarCar is an application that manages the inventory, sales of automobiles, and automobile services for an  an automobile dealership.
-
-Team:
-
-* April Hemingway - Sales
-* Luciano Whitehurst - Appointments
+AutoHub is an application that manages the inventory, sales of automobiles, and automobile services for an  an automobile dealership.
 
 
 ## How to Run this App
 
 1. Fork the repository:
-    https://gitlab.com/Eric.Whitehurst/project-beta.git
+    https://gitlab.com/ahemingway/autohub.git
 
 
 2. Clone the forked repository:
-   - git clone <<https://gitlab.com/Eric.Whitehurst/project-beta.git>>
+   - git clone <<https://gitlab.com/ahemingway/autohub.git>>
 
 
 3. Build docker containers and run them:
