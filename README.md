@@ -26,10 +26,6 @@ AutoHub is an application that manages the inventory, sales of automobiles, and 
 There is an inventory of all the cars. We are polling information from the inventory domain to our sales microservice and service microservice to store past sales and service histroy. As well as update the information when prompted by a request.
 
 
-## Design
-
-![img](./images/CarCar%20DDD%20Final.png)
-
 ## API Documentation
 
 ### Manufacturers:
