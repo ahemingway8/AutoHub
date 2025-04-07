@@ -6,7 +6,7 @@ AutoHub is an application that manages the inventory, sales of automobiles, and 
 ## How to Run this App
 
 1. Fork the repository:
-    https://gitlab.com/ahemingway/autohub.git
+    https://github.com/ahemingway8/AutoHub.git
 
 
 2. Clone the forked repository:
