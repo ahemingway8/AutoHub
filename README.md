@@ -10,7 +10,7 @@ AutoHub is an application that manages the inventory, sales of automobiles, and 
 
 
 2. Clone the forked repository:
-   - git clone <<https://gitlab.com/ahemingway/autohub.git>>
+   - git clone <<https://github.com/ahemingway8/AutoHub.git>>
 
 
 3. Build docker containers and run them:
